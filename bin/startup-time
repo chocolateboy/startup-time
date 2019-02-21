@@ -1,0 +1,8 @@
+#!/usr/bin/env ruby
+
+# frozen_string_literal: true
+
+require 'cli-pasta'
+require_relative '../lib/startup_time'
+
+StartupTime::App.new.run

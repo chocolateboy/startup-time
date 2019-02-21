@@ -1,0 +1,120 @@
+AllCops:
+  TargetRubyVersion: 2.4
+  DisplayCopNames: true
+  Exclude:
+    - 'dev/**/*'
+    - 'temp.*'
+    - 'vendor/**/*'
+    - '.bundle/**/*'
+    - '.git/**/*'
+    - '.rubocop/**/*'
+
+Layout/EndAlignment:
+  EnforcedStyleAlignWith: variable
+
+Layout/IndentHash:
+  EnforcedStyle: consistent
+
+Layout/MultilineMethodCallIndentation:
+  EnforcedStyle: indented
+
+Lint/NestedMethodDefinition:
+  Enabled: false
+
+# Configuration parameters: AllowHeredoc, AllowURI, URISchemes.
+# URISchemes: http, https
+Metrics/LineLength:
+  Max: 120
+
+Naming/FileName:
+  Exclude:
+    - '**/Rakefile'
+
+Naming/HeredocDelimiterNaming:
+    Enabled: false
+
+Security/Eval:
+  Enabled: false
+
+Style/AsciiComments:
+  Enabled: false
+
+Style/BracesAroundHashParameters:
+  Enabled: false
+
+Style/CommentAnnotation:
+  Enabled: false
+
+Style/ConditionalAssignment:
+  Enabled: false
+
+# Configuration parameters: EnforcedStyle, SupportedStyles.
+# SupportedStyles: format, sprintf, percent
+Style/FormatString:
+  Enabled: false
+
+Style/FormatStringToken:
+  Enabled: false
+
+Style/HashSyntax:
+  EnforcedStyle: ruby19
+  PreferHashRocketsForNonAlnumEndingSymbols: false
+  Exclude:
+    - '**/Rakefile'
+
+Style/IfUnlessModifier:
+  Enabled: false
+
+Style/MutableConstant:
+  Enabled: false
+
+Style/NegatedIf:
+  Enabled: false
+
+Style/NestedTernaryOperator:
+  Enabled: false
+
+Style/PercentLiteralDelimiters:
+  Enabled: false
+
+Style/TernaryParentheses:
+  Enabled: false
+
+Style/TrailingCommaInArrayLiteral:
+  Enabled: false
+
+Style/TrailingCommaInHashLiteral:
+  Enabled: false
+
+Style/WhileUntilModifier:
+  Enabled: false
+
+# We've chosen to use Rubocop only for style, and not for
+# "complexity" or "quality" checks.
+
+Metrics/AbcSize:
+  Enabled: false
+
+Metrics/BlockLength:
+  Enabled: false
+
+Metrics/BlockNesting:
+  Enabled: false
+
+Metrics/ClassLength:
+  Enabled: false
+
+Metrics/CyclomaticComplexity:
+  Enabled: false
+
+Metrics/MethodLength:
+  Enabled: false
+
+Metrics/ModuleLength:
+  Enabled: false
+
+Metrics/ParameterLists:
+  Enabled: false
+
+Metrics/PerceivedComplexity:
+  Enabled: false

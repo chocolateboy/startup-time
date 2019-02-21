@@ -1,0 +1,22 @@
+# http://EditorConfig.org
+
+# is this the topmost EditorConfig file?
+root = true
+
+[*]
+charset = utf-8
+end_of_line = lf
+insert_final_newline = true
+trim_trailing_whitespaces = true
+
+[{Rakefile,Gemfile}]
+indent_style = space
+max_line_length = 85
+
+[*.{gemspec,rb}]
+indent_style = space
+max_line_length = 85
+
+[bin/*]
+indent_style = space
+max_line_length = 85

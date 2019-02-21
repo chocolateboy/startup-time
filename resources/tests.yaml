@@ -1,0 +1,286 @@
+---
+# anything < 10ms on my system is arbitrarily tagged :fast
+# anything > 50ms on my system is arbitrarily tagged :slow
+
+bash:
+  name: Bash
+  groups:
+    - fast
+    - script
+  command:
+    - bash
+    - hello.bash
+
+crystal:
+  name: Crystal
+  groups:
+    - compiled
+    - fast
+    - native
+  source: hello.cr
+  compile: '%{compiler} build --release -o %{target} %{source}'
+  command: hello.cr.out
+  env:
+      CRYSTAL_CACHE_DIR: .crystal
+
+deno:
+  name: JavaScript (Deno)
+  groups:
+    - js
+    - script
+  command:
+    - deno
+    - hello.js
+
+dmd:
+  name: D (DMD)
+  groups:
+    - compiled
+    - d
+    - fast
+    - native
+  source: hello.d
+  compile: '%{compiler} -O3 -o %{target} %{source}'
+  command: hello.dmd.d.out
+
+g++:
+  name: C++ (g++)
+  groups:
+    - c++
+    - compiled
+    - cpp
+    - fast
+    - native
+  source: hello.cpp
+  compile: '%{compiler} -O3 -o %{target} %{source}'
+  command: hello.gpp.out
+
+gcc:
+  name: C (gcc)
+  groups:
+    - c
+    - compiled
+    - fast
+    - native
+    - no-ci # XXX flaky on Travis
+  source: hello.c
+  compile: '%{compiler} -O3 -o %{target} %{source}'
+  command: hello.gcc.out
+
+gdc:
+  name: D (GDC)
+  groups:
+    - compiled
+    - d
+    - fast
+    - native
+  source: hello.d
+  compile: '%{compiler} -O3 -o %{target} %{source}'
+  command: hello.gdc.d.out
+
+ghc:
+  name: Haskell (GHC)
+  groups:
+    - compiled
+    - fast
+    - haskell
+    - native
+  source: hello.hs
+  compile: '%{compiler} -v0 -O2 -outputdir .ghc -o %{target} %{source}'
+  command: hello.hs.out
+
+go:
+  name: Go
+  groups:
+    - compiled
+    - fast
+    - native
+  source: hello.go
+  compile: '%{compiler} build -o %{target} %{source}'
+  command: hello.go.out
+
+graalvm-js:
+  name: JavaScript (GraalVM)
+  groups:
+    - js
+    - script
+  command:
+    - js
+    - hello.js
+
+javac:
+  name: Java
+  groups:
+    - compiled
+    - java
+    - jvm
+  source: HelloJava.java
+  command:
+    - java
+    - HelloJava
+
+java-native:
+  name: Java Native (GraalVM)
+  groups:
+    - compiled
+    - fast
+    - java
+    - native
+    - slow-compile
+  compiler: native-image
+  source: HelloJava.class
+  command: hello.java.out
+
+kotlinc-native:
+  name: Kotlin Native
+  groups:
+    - compiled
+    - fast
+    - kotlin
+    - native
+    - slow-compile
+  source: HelloKotlin.kt
+  command: hello.kt.out
+
+kotlinc:
+  name: Kotlin
+  groups:
+    - compiled
+    - jvm
+    - kotlin
+    - slow
+  source: HelloKotlin.kt
+  target: HelloKotlinKt.class
+  compile: '%{compiler} %{source}'
+  command:
+    - kotlin
+    - HelloKotlinKt
+
+ldc:
+  name: D (LDC)
+  groups:
+    - compiled
+    - d
+    - fast
+    - native
+  source: hello.d
+  compile: '%{compiler} -O3 -o %{target} %{source}'
+  command: hello.ldc.d.out
+
+lua:
+  name: Lua
+  groups:
+    - fast
+    - luas
+    - script
+  command:
+    - lua
+    - hello.lua
+
+luajit:
+  name: LuaJIT
+  groups:
+    - fast
+    - luas
+    - script
+  command:
+    - luajit
+    - hello.lua
+
+nim:
+  name: Nim
+  groups:
+    - compiled
+    - fast
+    - native
+  source: hello.nim
+  compile: '%{compiler} compile --out:%{target} --opt:speed --verbosity:0 --hints:off %{source}'
+  command: hello.nim.out
+
+node:
+  name: JavaScript (Node.js)
+  groups:
+    - js
+    - script
+  command:
+    - node
+    - hello.js
+
+perl5:
+  name: Perl
+  groups:
+    - fast
+    - perl
+    - script
+  command:
+    - perl
+    - hello.pl
+
+perl6:
+  name: Perl 6
+  groups:
+    - perl
+    - script
+  command:
+    - perl6
+    - hello.p6
+
+python2:
+  name: Python 2
+  groups:
+    - python
+    - script
+  command:
+    - python2
+    - hello.py
+
+python3:
+  name: Python 3
+  groups:
+    - python
+    - script
+  command:
+    - python3
+    - hello.py
+
+ruby:
+  name: Ruby
+  groups:
+    - rubies
+    - script
+  command:
+    - ruby
+    - hello.rb
+
+rustc:
+  name: Rust
+  groups:
+    - compiled
+    - fast
+    - native
+  source: hello.rs
+  compile: '%{compiler} -O -o %{target} %{source}'
+  command: hello.rs.out
+
+scalac:
+  name: Scala
+  groups:
+    - compiled
+    - jvm
+    - slow
+    - slowest
+  source: HelloScala.scala
+  compile: '%{compiler} %{source}'
+  command:
+    - scala
+    - HelloScala
+
+truffle-ruby:
+  name: Ruby (TruffleRuby)
+  groups:
+    - no-test # doesn't work inside bundler
+    - rubies
+    - script
+  command:
+    - truffleruby
+    - hello.rb

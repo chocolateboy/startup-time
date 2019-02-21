@@ -1,98 +1,121 @@
-# Startup Time
+# startup-time
 
-An attempt to determine which languages are practical (or impractical) to use for command-line interface (CLI) programs.
+[![Build Status](https://travis-ci.org/chocolateboy/startup-time.svg)](https://travis-ci.org/chocolateboy/startup-time)
+[![Gem Version](https://img.shields.io/gem/v/startup-time.svg)](https://rubygems.org/gems/startup-time)
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 
-- [Description](#description)
-- [Example Output](#example-output)
-- [Prerequisites](#prerequisites)
-- [Setup](#setup)
-- [Tasks](#tasks)
-  - [Run the tests](#run-the-tests)
-  - [Clean up temporary files](#clean-up-temporary-files)
-- [Contributing](#contributing)
+- [NAME](#name)
+- [USAGE](#usage)
+- [INSTALLATION](#installation)
+- [DESCRIPTION](#description)
+  - [Why?](#why)
+  - [Example Output](#example-output)
+- [PREREQUISITES](#prerequisites)
 - [Further Reading](#further-reading)
 - [See Also](#see-also)
 - [Author](#author)
+- [Version](#version)
 - [Copyright and License](#copyright-and-license)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
-## Description
+## NAME
 
-This benchmark game tests how long it takes to execute ["Hello, world!"](https://en.wikipedia.org/wiki/%22Hello,_World!%22_program) programs written in various languages. It records the fastest time for each program and prints a sorted table of the times after each run. With the exception of the [prerequisites](#prerequisites) listed below, it does not require any of the tested languages to be installed: if a compiler/interpreter is not available, the test is skipped.
+startup-time - a command-line benchmarking tool which measures the startup times of programs in various languages
 
-## Example Output
+## USAGE
 
-    Test          Time (ms)
-    C (gcc)            0.37
-    LuaJIT             0.59
-    Go                 0.78
-    Kotlin Native      0.95
-    Lua                1.64
-    Perl               1.72
-    Haskell (GHC)      1.84
-    Rust               1.91
-    Crystal            1.93
-    C++ (g++)          2.31
-    Bash               3.62
-    Python 2 -S        4.66
-    Python 2          12.09
-    Python 3 -S       13.74
-    Python 3          20.42
-    Ruby              41.49
-    Java              55.18
-    Node.js           66.48
-    Kotlin           105.51
-    Scala            797.23
+```sh
+# run all available tests
+$ startup-time
 
-## Prerequisites
+# only run the "fast" tests
+$ startup-time --only fast
 
-* Ruby >= 1.9.3
-* [tty](https://github.com/peter-murach/tty#installation)
+# run all but the "slow" tests
+$ startup-time --omit slow
 
-## Setup
+# only run the JVM tests (e.g. Java, Scala etc.)
+$ startup-time --only jvm
 
-    gem install tty
+# only run tests which finish quickly
+$ startup-time --only fast --omit slow-compile
 
-## Tasks
+# increase the number of times each test is run (default: 10)
+$ startup-time --rounds 100
+```
 
-### Run the tests
+## INSTALLATION
 
-    rake
+```sh
+$ gem install startup-time
+```
 
-Or:
+## DESCRIPTION
 
-    rake rounds=20 # change the number of times each program is executed (default: 10)
+A command-line tool which measures how long it takes to execute ["Hello, world!"](https://en.wikipedia.org/wiki/%22Hello,_World!%22_program) programs written in various languages. It records the fastest time for each program and prints a sorted table of the times after each run. Apart from the [prerequisites](#prerequisites) listed below, the tool doesn't require any of the tested languages to be installed: if a compiler/interpreter is not available, the test is skipped.
 
-### Clean up temporary files
+### Why?
 
-    rake clean
+To determine which languages are practical (or impractical) to use for command-line interface (CLI) programs. Anything under
+[100 milliseconds](https://www.nngroup.com/articles/response-times-3-important-limits/) is perceived as instantaneous. Anything over that is perceived as delayed, which can tangibly impair productivity and flow, and even risk breaking the user's train of thought.
 
-## Contributing
+### Example Output
 
-Patches are welcome, but please make sure the test runs without warnings or errors if the compiler/interpreter is not installed. See the Rakefile for examples.
+    Test                  Time (ms)
+    C (gcc)                    0.33
+    Nim                        0.45
+    LuaJIT                     0.62
+    Rust                       0.63
+    Kotlin Native (konan)      0.66
+    Go                         0.75
+    Lua                        1.00
+    Haskell (GHC)              1.17
+    C++ (g++)                  1.24
+    Perl                       1.75
+    Java Native (GraalVM)      1.95
+    Crystal                    2.20
+    Bash                       3.37
+    JavaScript (Deno)         11.18
+    Python 3                  26.41
+    JavaScript (GraalVM)      35.58
+    Java                      56.40
+    Python 2                  57.00
+    JavaScript (Node.js)      71.61
+    Ruby                      77.30
+    Ruby (TruffleRuby)        91.28
+    Kotlin                   103.02
+    Scala                    801.21
+
+## PREREQUISITES
+
+- Ruby >= 2.4
 
 ## Further Reading
 
-* [Response Times: The 3 Important Limits](https://www.nngroup.com/articles/response-times-3-important-limits/)
-* [100 milliseconds](http://cogsci.stackexchange.com/questions/1664/what-is-the-threshold-where-actions-are-perceived-as-instant)
-* [The Great Startup Problem](http://mail.openjdk.java.net/pipermail/mlvm-dev/2014-August/005866.html)
+- [Response Times: The 3 Important Limits](https://www.nngroup.com/articles/response-times-3-important-limits/)
+- [100 milliseconds](http://cogsci.stackexchange.com/questions/1664/what-is-the-threshold-where-actions-are-perceived-as-instant)
+- [The Great Startup Problem](http://mail.openjdk.java.net/pipermail/mlvm-dev/2014-August/005866.html)
 
 ## See Also
 
-* [gnustavo/startup-times](https://github.com/gnustavo/startup-times "A script to investigate the startup times of several programming languages")
-* [jwiegley/helloworld](https://github.com/jwiegley/helloworld "A comparison of Hello, world startup times in various languages")
+- [gnustavo/startup-times](https://github.com/gnustavo/startup-times) - a script to investigate the startup times of several programming languages
+- [jwiegley/helloworld](https://github.com/jwiegley/helloworld) - a comparison of "Hello, world" startup times in various languages
+- [sharkdp/hyperfine](https://github.com/sharkdp/hyperfine) - a command-line benchmarking tool
 
 ## Author
 
 [chocolateboy](mailto:chocolate@cpan.org)
 
+## Version
+
+1.0.0
+
 ## Copyright and License
 
-Copyright © 2015-2017 by chocolateboy
+Copyright © 2015-2019 by chocolateboy
 
 This benchmark game is free software; you can redistribute it and/or modify it under the
 terms of the [Artistic License 2.0](http://www.opensource.org/licenses/artistic-license-2.0.php).
