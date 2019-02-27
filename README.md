@@ -81,7 +81,7 @@ OPTIONS:
         --clean                      Remove the build directory and exit
                                      (targets will be recompiled on the next run)
     -d, --dir PATH                   Specify the build directory
-                                     (default: ${XDG_CONFIG_HOME:-~/.cache/startup-time})
+                                     (default: "${XDG_CACHE_HOME:-~/.cache}/startup-time")
     -h, --help                       Show this help message and exit
     -H, --help-only, --help-omit     Show the IDs and groups that can be passed to --only and --omit
     -j, --json                       Output the results in JSON format (implies --quiet)
