@@ -9,10 +9,10 @@
 - [NAME](#name)
 - [INSTALLATION](#installation)
 - [SYNOPSIS](#synopsis)
+  - [Sample Output](#sample-output)
 - [DESCRIPTION](#description)
   - [Why?](#why)
 - [OPTIONS](#options)
-- [SAMPLE OUTPUT](#sample-output)
 - [PREREQUISITES](#prerequisites)
 - [REFERENCES](#references)
 - [SEE ALSO](#see-also)
@@ -54,45 +54,7 @@ $ startup-time --only fast --omit slow-compile
 $ startup-time --count 100
 ```
 
-## DESCRIPTION
-
-A command-line tool which measures how long it takes to execute ["Hello, world!"](https://en.wikipedia.org/wiki/%22Hello,_World!%22_program)
-programs written in various languages. It records the fastest time for each program and prints a sorted table of the times after each run.
-Apart from the [prerequisites](#prerequisites) listed below, the tool doesn't require any of the tested languages to be installed: if a
-compiler/interpreter is not available, the test is skipped.
-
-### Why?
-
-To determine which languages are practical (or impractical) to use for command-line interface (CLI) tools. Anything under
-[100 milliseconds](https://www.nngroup.com/articles/response-times-3-important-limits/) is perceived as instantaneous.
-Anything over that is perceptibly delayed, which can impair interactivity and productivity on the command line, and can
-mean the difference between staying in the zone and losing your train of thought.
-
-## OPTIONS
-
-```
-USAGE:
-
-    startup-time [options]
-
-OPTIONS:
-
-    -c, --count, --rounds INTEGER    The number of times to execute each test (default: 10)
-        --clean                      Remove the build directory and exit
-                                     (targets will be recompiled on the next run)
-    -d, --dir PATH                   Specify the build directory
-                                     (default: "${XDG_CACHE_HOME:-~/.cache}/startup-time")
-    -h, --help                       Show this help message and exit
-    -H, --help-only, --help-omit     Show the IDs and groups that can be passed to --only and --omit
-    -j, --json                       Output the results in JSON format (implies --quiet)
-    -o, --only LIST                  Only execute the specified tests (comma-separated list of IDs/groups)
-    -O, --omit LIST                  Don't execute the specified tests (comma-separated list of IDs/groups)
-    -q, --quiet                      Suppress all inessential output
-    -v, --verbose                    Enable verbose logging
-    -V, --version                    Display the version and exit
-```
-
-## SAMPLE OUTPUT
+### Sample Output
 
     Test                  Time (ms)
     C (gcc)                    0.33
@@ -120,6 +82,44 @@ OPTIONS:
     Ruby (TruffleRuby)        81.77
     Kotlin                   103.02
     Scala                    801.21
+
+## DESCRIPTION
+
+A command-line tool which measures how long it takes to execute ["Hello, world!"](https://en.wikipedia.org/wiki/%22Hello,_World!%22_program)
+programs written in various languages. It records the fastest time for each program and prints a sorted table of the times after each run.
+Apart from the [prerequisites](#prerequisites) listed below, the tool doesn't require any of the tested languages to be installed: if a
+compiler/interpreter is not available, the test is skipped.
+
+### Why?
+
+To determine which languages are practical (or impractical) to use for command-line interface (CLI) tools. Anything under
+[100 milliseconds](https://www.nngroup.com/articles/response-times-3-important-limits/) is perceived as instantaneous.
+Anything over that is perceptibly delayed, which can impair interactivity and productivity on the command line, and can
+mean the difference between staying in the zone and losing your train of thought.
+
+## OPTIONS
+
+```
+USAGE:
+
+    startup-time [options]
+
+OPTIONS:
+
+    -c, --count, --rounds INTEGER    The number of times to run each test (default: 10)
+        --clean                      Remove the build directory and exit
+                                     (targets will be recompiled on the next run)
+    -d, --dir PATH                   Specify the build directory
+                                     (default: "${XDG_CACHE_HOME:-~/.cache}/startup-time")
+    -h, --help                       Show this help message and exit
+    -H, --help-only, --help-omit     Show the IDs and groups that can be passed to --only and --omit
+    -j, --json                       Output the results in JSON format (implies --quiet)
+    -o, --only LIST                  Only run the specified tests (comma-separated list of IDs/groups)
+    -O, --omit LIST                  Don't run the specified tests (comma-separated list of IDs/groups)
+    -q, --quiet                      Suppress all inessential output
+    -v, --verbose                    Enable verbose logging
+    -V, --version                    Display the version and exit
+```
 
 ## PREREQUISITES
 
