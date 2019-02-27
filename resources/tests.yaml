@@ -1,12 +1,13 @@
 ---
-# anything < 10ms on my system is arbitrarily tagged :fast
-# anything > 50ms on my system is arbitrarily tagged :slow
+# anything < 10 ms on my system is arbitrarily tagged :fast
+# anything > ~100 ms on my system is tagged :slow
 
 bash:
   name: Bash
   groups:
     - fast
     - script
+  version: '%{compiler} --version | head -n1'
   command:
     - bash
     - hello.bash
@@ -17,6 +18,7 @@ crystal:
     - compiled
     - fast
     - native
+    - slow-compile
   source: hello.cr
   compile: '%{compiler} build --release -o %{target} %{source}'
   command: hello.cr.out
@@ -40,7 +42,8 @@ dmd:
     - fast
     - native
   source: hello.d
-  compile: '%{compiler} -O3 -o %{target} %{source}'
+  compile: '%{compiler} -O -of=%{target} %{source}'
+  version: '%{compiler} --version | head -n1'
   command: hello.dmd.d.out
 
 g++:
@@ -53,6 +56,7 @@ g++:
     - native
   source: hello.cpp
   compile: '%{compiler} -O3 -o %{target} %{source}'
+  version: '%{compiler} --version | head -n1'
   command: hello.gpp.out
 
 gcc:
@@ -62,9 +66,9 @@ gcc:
     - compiled
     - fast
     - native
-    - no-ci # XXX flaky on Travis
   source: hello.c
   compile: '%{compiler} -O3 -o %{target} %{source}'
+  version: '%{compiler} --version | head -n1'
   command: hello.gcc.out
 
 gdc:
@@ -76,6 +80,7 @@ gdc:
     - native
   source: hello.d
   compile: '%{compiler} -O3 -o %{target} %{source}'
+  version: '%{compiler} --version | head -n1'
   command: hello.gdc.d.out
 
 ghc:
@@ -97,6 +102,7 @@ go:
     - native
   source: hello.go
   compile: '%{compiler} build -o %{target} %{source}'
+  version: '%{compiler} version'
   command: hello.go.out
 
 graalvm-js:
@@ -104,6 +110,7 @@ graalvm-js:
   groups:
     - js
     - script
+  version: '%{compiler} --version'
   command:
     - js
     - hello.js
@@ -115,6 +122,7 @@ javac:
     - java
     - jvm
   source: HelloJava.java
+  version: '%{compiler} -version'
   command:
     - java
     - HelloJava
@@ -140,6 +148,8 @@ kotlinc-native:
     - native
     - slow-compile
   source: HelloKotlin.kt
+  compiler: konanc
+  version: '%{compiler} -version'
   command: hello.kt.out
 
 kotlinc:
@@ -152,6 +162,7 @@ kotlinc:
   source: HelloKotlin.kt
   target: HelloKotlinKt.class
   compile: '%{compiler} %{source}'
+  version: '%{compiler} -version'
   command:
     - kotlin
     - HelloKotlinKt
@@ -173,6 +184,7 @@ lua:
     - fast
     - luas
     - script
+  version: '%{compiler} -v'
   command:
     - lua
     - hello.lua
@@ -183,6 +195,7 @@ luajit:
     - fast
     - luas
     - script
+  version: '%{compiler} -v'
   command:
     - luajit
     - hello.lua
@@ -195,6 +208,7 @@ nim:
     - native
   source: hello.nim
   compile: '%{compiler} compile --out:%{target} --opt:speed --verbosity:0 --hints:off %{source}'
+  version: '%{compiler} --version | head -n1'
   command: hello.nim.out
 
 node:
@@ -212,6 +226,8 @@ perl5:
     - fast
     - perl
     - script
+  # trim perl's lengthy version output
+  version: "%{compiler} -MConfig -le 'print qq($^V $Config{archname})'"
   command:
     - perl
     - hello.pl
@@ -271,6 +287,7 @@ scalac:
     - slowest
   source: HelloScala.scala
   compile: '%{compiler} %{source}'
+  version: '%{compiler} -version'
   command:
     - scala
     - HelloScala
@@ -278,9 +295,9 @@ scalac:
 truffle-ruby:
   name: Ruby (TruffleRuby)
   groups:
-    - no-test # doesn't work inside bundler
     - rubies
     - script
+  version: '%{compiler} --version'
   command:
     - truffleruby
     - hello.rb

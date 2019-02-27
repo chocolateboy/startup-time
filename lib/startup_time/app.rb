@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'benchmark'
+require 'bundler/setup'
 require 'komenda'
 require 'shellwords' # for Array#shelljoin
 require 'tty/table'
@@ -11,8 +12,9 @@ module StartupTime
   class App
     EXPECTED_OUTPUT = /\AHello, world!\r?\n\z/
 
+    include FileUtils # for `sh`
     include Util # for `which`
-    include Services.mixin %i[builder ids_to_groups options selected_tests]
+    include Services.mixin %i[builder ids_to_groups selected_tests]
 
     def initialize(args = ARGV)
       @options = Options.new(args)
@@ -65,7 +67,7 @@ module StartupTime
 
       sorted = @times.sort_by { |result| result[:time] }
 
-      if options.format == :json
+      if @options.format == :json
         require 'json'
         puts sorted.to_json
       elsif !sorted.empty?
@@ -94,15 +96,46 @@ module StartupTime
       args = Array(test[:command])
 
       if args.size == 1 # native executable
+        compiler = test[:compiler] || id
         cmd = File.absolute_path(args.first)
-        return unless File.exist? cmd
+        return unless File.exist?(cmd)
       else # interpreter + source
-        cmd = which(args.first)
+        compiler = args.first
+        cmd = which(compiler)
         return unless cmd
+      end
+
+      # dump the compiler/interpreter's version if running in verbose mode
+      if @verbosity == :verbose
+        puts
+        puts "test: #{id}"
+
+        # false (don't print the program's version); otherwise, a command
+        # (template string) to execute to dump the version
+        version = test[:version]
+
+        unless version == false
+          version ||= '%{compiler} --version'
+
+          # the compiler may have been uninstalled since the target was
+          # built, so make sure it still exists
+          if (compiler_path = which(compiler))
+            version_command = version % { compiler: compiler_path }
+            sh version_command
+          end
+        end
       end
 
       argv0 = args.shift
       command = [cmd, *args]
+
+      unless @verbosity == :quiet
+        if @verbosity == :verbose
+          puts "command: #{command.shelljoin}"
+        else
+          print '.'
+        end
+      end
 
       # make sure the command produces the expected output
       result = Komenda.run(command)
@@ -118,17 +151,13 @@ module StartupTime
 
       times = []
 
-      unless @verbosity == :quiet
-        if @verbosity == :verbose
-          puts "#{id}: #{command.shelljoin}"
-        else
-          print '.'
-        end
-      end
-
-      @options.rounds.times do
-        times << Benchmark.realtime do
-          system([cmd, argv0], *args, out: File::NULL)
+      # the bundler environment slows down ruby and breaks truffle-ruby,
+      # so make sure it's disabled for the benchmark
+      Bundler.with_clean_env do
+        @options.rounds.times do
+          times << Benchmark.realtime do
+            system([cmd, argv0], *args, out: File::NULL)
+          end
         end
       end
 

@@ -48,8 +48,8 @@ module StartupTime
 
         opts.on(
           '--clean',
-          'Remove the build directory and exit (targets will be ',
-          'recompiled on the next run)'
+          'Remove the build directory and exit',
+          '(targets will be recompiled on the next run)'
         ) do
           @action = :clean
         end
@@ -58,7 +58,8 @@ module StartupTime
           '-d',
           '--dir PATH',
           String,
-          "Specify the build directory (default: #{BUILD_DIR})"
+          'Specify the build directory',
+          "(default: #{BUILD_DIR})"
         ) do |value|
           @build_dir = value
         end
@@ -93,8 +94,7 @@ module StartupTime
           '-o',
           '--only LIST',
           Array, # comma-separated strings
-          'Only execute the specified tests (comma-separated list of ',
-          'IDs/groups)'
+          'Only execute the specified tests (comma-separated list of IDs/groups)'
         ) do |values|
           values.each { |value| registry.only(value.strip) }
         end
@@ -103,8 +103,7 @@ module StartupTime
           '-O',
           '--omit LIST',
           Array, # comma-separated strings
-          "Don't execute the specified tests (comma-separated list ",
-          'of IDs/groups)'
+          "Don't execute the specified tests (comma-separated list of IDs/groups)"
         ) do |values|
           values.each { |value| registry.omit(value.strip) }
         end

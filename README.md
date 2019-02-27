@@ -7,17 +7,18 @@
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 
 - [NAME](#name)
-- [USAGE](#usage)
 - [INSTALLATION](#installation)
+- [SYNOPSIS](#synopsis)
 - [DESCRIPTION](#description)
   - [Why?](#why)
-  - [Example Output](#example-output)
+- [OPTIONS](#options)
+- [SAMPLE OUTPUT](#sample-output)
 - [PREREQUISITES](#prerequisites)
-- [Further Reading](#further-reading)
-- [See Also](#see-also)
-- [Author](#author)
-- [Version](#version)
-- [Copyright and License](#copyright-and-license)
+- [REFERENCES](#references)
+- [SEE ALSO](#see-also)
+- [AUTHOR](#author)
+- [VERSION](#version)
+- [COPYRIGHT AND LICENSE](#copyright-and-license)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -25,7 +26,13 @@
 
 startup-time - a command-line benchmarking tool which measures the startup times of programs in various languages
 
-## USAGE
+## INSTALLATION
+
+```sh
+$ gem install startup-time
+```
+
+## SYNOPSIS
 
 ```sh
 # run all available tests
@@ -44,48 +51,73 @@ $ startup-time --only jvm
 $ startup-time --only fast --omit slow-compile
 
 # increase the number of times each test is run (default: 10)
-$ startup-time --rounds 100
-```
-
-## INSTALLATION
-
-```sh
-$ gem install startup-time
+$ startup-time --count 100
 ```
 
 ## DESCRIPTION
 
-A command-line tool which measures how long it takes to execute ["Hello, world!"](https://en.wikipedia.org/wiki/%22Hello,_World!%22_program) programs written in various languages. It records the fastest time for each program and prints a sorted table of the times after each run. Apart from the [prerequisites](#prerequisites) listed below, the tool doesn't require any of the tested languages to be installed: if a compiler/interpreter is not available, the test is skipped.
+A command-line tool which measures how long it takes to execute ["Hello, world!"](https://en.wikipedia.org/wiki/%22Hello,_World!%22_program)
+programs written in various languages. It records the fastest time for each program and prints a sorted table of the times after each run.
+Apart from the [prerequisites](#prerequisites) listed below, the tool doesn't require any of the tested languages to be installed: if a
+compiler/interpreter is not available, the test is skipped.
 
 ### Why?
 
-To determine which languages are practical (or impractical) to use for command-line interface (CLI) programs. Anything under
-[100 milliseconds](https://www.nngroup.com/articles/response-times-3-important-limits/) is perceived as instantaneous. Anything over that is perceived as delayed, which can tangibly impair productivity and flow, and even risk breaking the user's train of thought.
+To determine which languages are practical (or impractical) to use for command-line interface (CLI) tools. Anything under
+[100 milliseconds](https://www.nngroup.com/articles/response-times-3-important-limits/) is perceived as instantaneous.
+Anything over that is perceptibly delayed, which can impair interactivity and productivity on the command line, and can
+mean the difference between staying in the zone and losing your train of thought.
 
-### Example Output
+## OPTIONS
+
+```
+USAGE:
+
+    startup-time [options]
+
+OPTIONS:
+
+    -c, --count, --rounds INTEGER    The number of times to execute each test (default: 10)
+        --clean                      Remove the build directory and exit
+                                     (targets will be recompiled on the next run)
+    -d, --dir PATH                   Specify the build directory
+                                     (default: ${XDG_CONFIG_HOME:-~/.cache/startup-time})
+    -h, --help                       Show this help message and exit
+    -H, --help-only, --help-omit     Show the IDs and groups that can be passed to --only and --omit
+    -j, --json                       Output the results in JSON format (implies --quiet)
+    -o, --only LIST                  Only execute the specified tests (comma-separated list of IDs/groups)
+    -O, --omit LIST                  Don't execute the specified tests (comma-separated list of IDs/groups)
+    -q, --quiet                      Suppress all inessential output
+    -v, --verbose                    Enable verbose logging
+    -V, --version                    Display the version and exit
+```
+
+## SAMPLE OUTPUT
 
     Test                  Time (ms)
     C (gcc)                    0.33
-    Nim                        0.45
-    LuaJIT                     0.62
-    Rust                       0.63
-    Kotlin Native (konan)      0.66
-    Go                         0.75
-    Lua                        1.00
-    Haskell (GHC)              1.17
+    Nim                        0.44
+    Kotlin Native              0.61
+    LuaJIT                     0.64
+    Go                         0.66
+    Rust                       0.67
+    D (DMD)                    0.88
+    Lua                        0.98
+    D (GDC)                    1.10
+    Haskell (GHC)              1.14
     C++ (g++)                  1.24
-    Perl                       1.75
+    Perl                       1.69
     Java Native (GraalVM)      1.95
-    Crystal                    2.20
-    Bash                       3.37
-    JavaScript (Deno)         11.18
-    Python 3                  26.41
-    JavaScript (GraalVM)      35.58
-    Java                      56.40
-    Python 2                  57.00
-    JavaScript (Node.js)      71.61
-    Ruby                      77.30
-    Ruby (TruffleRuby)        91.28
+    Crystal                    2.10
+    Bash                       3.36
+    JavaScript (Deno)         11.15
+    Python 3                  25.68
+    JavaScript (GraalVM)      32.38
+    Java                      54.59
+    Python 2                  56.30
+    JavaScript (Node.js)      70.39
+    Ruby                      77.04
+    Ruby (TruffleRuby)        81.77
     Kotlin                   103.02
     Scala                    801.21
 
@@ -93,27 +125,26 @@ To determine which languages are practical (or impractical) to use for command-l
 
 - Ruby >= 2.4
 
-## Further Reading
+## REFERENCES
 
 - [Response Times: The 3 Important Limits](https://www.nngroup.com/articles/response-times-3-important-limits/)
 - [100 milliseconds](http://cogsci.stackexchange.com/questions/1664/what-is-the-threshold-where-actions-are-perceived-as-instant)
-- [The Great Startup Problem](http://mail.openjdk.java.net/pipermail/mlvm-dev/2014-August/005866.html)
 
-## See Also
+## SEE ALSO
 
 - [gnustavo/startup-times](https://github.com/gnustavo/startup-times) - a script to investigate the startup times of several programming languages
 - [jwiegley/helloworld](https://github.com/jwiegley/helloworld) - a comparison of "Hello, world" startup times in various languages
 - [sharkdp/hyperfine](https://github.com/sharkdp/hyperfine) - a command-line benchmarking tool
 
-## Author
+## AUTHOR
 
 [chocolateboy](mailto:chocolate@cpan.org)
 
-## Version
+## VERSION
 
-1.0.0
+1.1.0
 
-## Copyright and License
+## COPYRIGHT AND LICENSE
 
 Copyright © 2015-2019 by chocolateboy
 

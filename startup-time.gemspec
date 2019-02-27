@@ -14,7 +14,7 @@ Gem::Specification.new do |spec|
   spec.license  = 'Artistic-2.0'
 
   spec.description = <<~'EOS'.strip.gsub(/\s+/, ' ')
-    A benchmarking tool which tests how long it takes to execute
+    A benchmarking tool which measures how long it takes to execute
     "Hello, world!" programs in various languages.
   EOS
 
@@ -32,6 +32,7 @@ Gem::Specification.new do |spec|
   }
 
   spec.add_runtime_dependency 'activesupport', '~> 5.2'
+  spec.add_runtime_dependency 'bundler', '~> 2.0'
   spec.add_runtime_dependency 'cli-pasta', '~> 2.0.0'
   spec.add_runtime_dependency 'env_paths', '~> 1.0.0'
   spec.add_runtime_dependency 'komenda', '~> 0.1.8'
@@ -43,6 +44,5 @@ Gem::Specification.new do |spec|
   spec.add_runtime_dependency 'tty-which', '~> 0.4.0'
   spec.add_runtime_dependency 'wireless', '~> 0.0.2'
 
-  spec.add_development_dependency 'bundler', '~> 2.0'
   spec.add_development_dependency 'rubocop', '~> 0.65.0'
 end

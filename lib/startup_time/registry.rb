@@ -46,7 +46,7 @@ module StartupTime
       @only = Set.new
     end
 
-    # remove the specified test(s) from the set of enabled tests
+    # add the specified test(s) to the set of disabled tests
     def omit(id)
       @omit.merge(ids_for(id))
     end
