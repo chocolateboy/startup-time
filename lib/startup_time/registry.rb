@@ -20,7 +20,7 @@ module StartupTime
 
     # the top-level hash in tests.yaml. keys are test IDs (e.g. "ruby"); values
     # are test specs
-    TESTS = YAML.load_file(TEST_DATA).with_indifferent_access
+    TESTS = YAML.safe_load(File.read(TEST_DATA)).with_indifferent_access
 
     # perform some basic sanity checks on the test specs and populate the group
     # -> tests map

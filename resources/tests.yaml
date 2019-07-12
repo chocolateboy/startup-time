@@ -30,6 +30,7 @@ deno:
   groups:
     - js
     - script
+  version: '%{compiler} version | head -n1'
   command:
     - deno
     - hello.js
@@ -218,6 +219,17 @@ node:
     - script
   command:
     - node
+    - hello.js
+
+quickjs:
+  name: JavaScript (QuickJS)
+  groups:
+    - fast
+    - js
+    - script
+  version: '%{compiler} --help | head -n1'
+  command:
+    - qjs
     - hello.js
 
 perl5:

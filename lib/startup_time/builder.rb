@@ -104,14 +104,14 @@ module StartupTime
         end
       end
 
-      # update the test hash's compiler field to point to the compiler's
+      # update the test spec's compiler field to point to the compiler's
       # absolute path (which may be mocked)
       test = test.merge(compiler: compiler_path)
 
-      # pass the test object as the block's second argument.  Rake passes an
+      # pass the test object as the block's second argument. Rake passes an
       # instance of +Rake::TaskArguments+, a Hash-like object which provides
       # access to the command-line arguments for a Rake task e.g. { name:
-      # "world" } for `rake greet[world]`.  since we're not relying on Rake's
+      # "world" } for `rake greet[world]`. since we're not relying on Rake's
       # limited option-handling support, we have no use for that here, so we
       # simply replace it with the test data.
       wrapper = ->(task, _) { yield(task, test) }

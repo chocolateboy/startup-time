@@ -9,12 +9,10 @@ GEMSPEC = Gem::Specification.load('startup-time.gemspec')
 # prepend the :test task to the release task's prerequisites
 Rake::Task[:release].enhance([:test])
 
-# replace the bundler version with a version which installs the dependencies,
-# builds the documentation, and honors --user-install
-Rake::Task[:install].clear
-
+# an alternative to bundler's :install task which installs the dependencies, builds
+# the documentation, and honors --user-install
 desc 'Install %s and its dependencies into the system gems' % GEMSPEC.name
-task :install => %i[test build] do
+task :install_with_dependencies => %i[test build] do
   Bundler.with_clean_env do
     sh 'gem install pkg/%s.gem' % GEMSPEC.full_name
   end

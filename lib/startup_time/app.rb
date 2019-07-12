@@ -1,10 +1,16 @@
 # frozen_string_literal: true
 
 require 'benchmark'
-require 'bundler/setup'
 require 'komenda'
 require 'shellwords' # for Array#shelljoin
 require 'tty/table'
+
+# FIXME we only need bundler/setup here, but it appears to create an incomplete
+# Bundler object which (sometimes) confuses Komenda as well as causing a
+# Gem::LoadError (for unicode-display_width)
+#
+# require 'bundler/setup'
+require 'bundler'
 
 module StartupTime
   # StartupTime::App - the entry point for the app.
@@ -27,7 +33,7 @@ module StartupTime
     end
 
     # run the command corresponding to the command-line options:
-    # either an auxiliary command (e.g. clean the build dir
+    # either an auxiliary command (e.g. clean the build directory
     # or print a help message) or the default command, which runs
     # the selected benchmark-tests
     def run

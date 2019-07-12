@@ -3,8 +3,7 @@
 [![Build Status](https://travis-ci.org/chocolateboy/startup-time.svg)](https://travis-ci.org/chocolateboy/startup-time)
 [![Gem Version](https://img.shields.io/gem/v/startup-time.svg)](https://rubygems.org/gems/startup-time)
 
-<!-- START doctoc generated TOC please keep comment here to allow auto update -->
-<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+<!-- toc -->
 
 - [NAME](#name)
 - [INSTALLATION](#installation)
@@ -20,7 +19,7 @@
 - [VERSION](#version)
 - [COPYRIGHT AND LICENSE](#copyright-and-license)
 
-<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+<!-- tocstop -->
 
 ## NAME
 
@@ -64,21 +63,22 @@ $ startup-time --count 100
     Go                         0.66
     Rust                       0.67
     D (DMD)                    0.88
+    JavaScript (QuickJS)       0.92
     Lua                        0.98
     D (GDC)                    1.10
     Haskell (GHC)              1.14
-    C++ (g++)                  1.24
-    Perl                       1.69
+    C++ (g++)                  1.22
+    Crystal                    1.63
+    Perl                       1.66
     Java Native (GraalVM)      1.95
-    Crystal                    2.10
-    Bash                       3.36
+    Bash                       2.67
     JavaScript (Deno)         11.15
-    Python 3                  25.68
+    Python 3                  22.09
     JavaScript (GraalVM)      32.38
+    JavaScript (Node.js)      35.20
+    Python 2                  43.43
     Java                      54.59
-    Python 2                  56.30
-    JavaScript (Node.js)      70.39
-    Ruby                      77.04
+    Ruby                      67.40
     Ruby (TruffleRuby)        81.77
     Kotlin                   103.02
     Scala                    801.21
