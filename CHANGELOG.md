@@ -1,6 +1,7 @@
-## 1.1.1 - TBD
+## 1.1.1 - 2019-07-13
 
-- docfix
+- add QuickJS
+- fix deno version command
 
 ## 1.1.0 - 2019-02-27
 
