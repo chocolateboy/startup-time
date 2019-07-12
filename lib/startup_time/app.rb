@@ -5,9 +5,9 @@ require 'komenda'
 require 'shellwords' # for Array#shelljoin
 require 'tty/table'
 
-# FIXME we only need bundler/setup here, but it appears to create an incomplete
-# Bundler object which (sometimes) confuses Komenda as well as causing a
-# Gem::LoadError (for unicode-display_width)
+# FIXME we only need bundler/setup here (for Bundler.with_clean_env), but it appears
+# to create an incomplete Bundler object which (sometimes) confuses Komenda as well
+# as causing a Gem::LoadError (for unicode-display_width)
 #
 # require 'bundler/setup'
 require 'bundler'
@@ -67,16 +67,58 @@ module StartupTime
     def benchmark
       builder.build!
 
-      selected_tests.entries.shuffle.each do |id, test|
-        time(id, test)
+      # run a test if:
+      #
+      #   - its interpreter exists
+      #   - it's a compiled executable (i.e. its compiler exists)
+      #
+      # otherwise, skip it
+      runnable_tests = selected_tests.each_with_object([]) do |(id, test), tests|
+        args = Array(test[:command])
+
+        if args.size == 1 # native executable
+          compiler = test[:compiler] || id
+          path = File.absolute_path(args.first)
+          next unless File.exist?(path)
+        else # interpreter + source
+          compiler = args.first
+          path = which(compiler)
+          next unless path
+        end
+
+        tests << {
+          id: id,
+          test: test,
+          args: args,
+          compiler: compiler,
+          path: path,
+        }
+      end
+
+      json = @options.format == :json
+
+      if runnable_tests.empty?
+        puts '[]' if json
+        return
+      end
+
+      spec = @options.spec
+
+      if spec.type == :duration
+        spec = spec.with(value: spec.value.to_f / runnable_tests.length)
+      end
+
+      runnable_tests.shuffle.each do |config|
+        config[:spec] = spec
+        time(config)
       end
 
       sorted = @times.sort_by { |result| result[:time] }
 
-      if @options.format == :json
+      if json
         require 'json'
         puts sorted.to_json
-      elsif !sorted.empty?
+      else
         pairs = sorted.map { |result| [result[:name], '%.02f' % result[:time]] }
         table = TTY::Table.new(['Test', 'Time (ms)'], pairs)
         puts unless @verbosity == :quiet
@@ -91,26 +133,9 @@ module StartupTime
       table.render
     end
 
-    # takes a test ID and a test spec and measures how long it takes to execute
-    # the test if either:
-    #
-    #   - its interpreter exists
-    #   - it's a compiled executable (i.e. its compiler exists)
-    #
-    # otherwise, skip the test
-    def time(id, test)
-      args = Array(test[:command])
-
-      if args.size == 1 # native executable
-        compiler = test[:compiler] || id
-        cmd = File.absolute_path(args.first)
-        return unless File.exist?(cmd)
-      else # interpreter + source
-        compiler = args.first
-        cmd = which(compiler)
-        return unless cmd
-      end
-
+    # takes a test configuration and measures how long it takes to execute the
+    # test
+    def time(id:, test:, args:, compiler:, path:, spec:)
       # dump the compiler/interpreter's version if running in verbose mode
       if @verbosity == :verbose
         puts
@@ -133,7 +158,7 @@ module StartupTime
       end
 
       argv0 = args.shift
-      command = [cmd, *args]
+      command = [path, *args]
 
       unless @verbosity == :quiet
         if @verbosity == :verbose
@@ -160,9 +185,26 @@ module StartupTime
       # the bundler environment slows down ruby and breaks truffle-ruby,
       # so make sure it's disabled for the benchmark
       Bundler.with_clean_env do
-        @options.rounds.times do
-          times << Benchmark.realtime do
-            system([cmd, argv0], *args, out: File::NULL)
+        if spec.type == :duration # how long to run the tests for
+          duration = spec.value
+          elapsed = 0
+          start = Time.now
+
+          loop do
+            time = Benchmark.realtime do
+              system([path, argv0], *args, out: File::NULL)
+            end
+
+            elapsed = Time.now - start
+            times << time
+
+            break if elapsed >= duration
+          end
+        else # how many times to run the tests
+          spec.value.times do
+            times << Benchmark.realtime do
+              system([path, argv0], *args, out: File::NULL)
+            end
           end
         end
       end

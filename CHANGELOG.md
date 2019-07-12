@@ -1,7 +1,12 @@
+## 1.2.0 - TBD
+
+- add -t/--time option specifying the minimum length of time to run tests for
+ (default: 5s)
+
 ## 1.1.1 - 2019-07-13
 
 - add QuickJS
-- fix deno version command
+- update deno version command
 
 ## 1.1.0 - 2019-02-27
 

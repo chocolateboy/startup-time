@@ -106,7 +106,7 @@ USAGE:
 
 OPTIONS:
 
-    -c, --count, --rounds INTEGER    The number of times to run each test (default: 10)
+    -c, --count, --rounds INTEGER    The number of times to run each test
         --clean                      Remove the build directory and exit
                                      (targets will be recompiled on the next run)
     -d, --dir PATH                   Specify the build directory
@@ -117,6 +117,8 @@ OPTIONS:
     -o, --only LIST                  Only run the specified tests (comma-separated list of IDs/groups)
     -O, --omit LIST                  Don't run the specified tests (comma-separated list of IDs/groups)
     -q, --quiet                      Suppress all inessential output
+    -t, --time INTEGER               The minimum number of seconds to run the tests for
+                                     (minimum: 2s, default: 5s)
     -v, --verbose                    Enable verbose logging
     -V, --version                    Display the version and exit
 ```

@@ -108,12 +108,12 @@ module StartupTime
       # absolute path (which may be mocked)
       test = test.merge(compiler: compiler_path)
 
-      # pass the test object as the block's second argument. Rake passes an
-      # instance of +Rake::TaskArguments+, a Hash-like object which provides
-      # access to the command-line arguments for a Rake task e.g. { name:
-      # "world" } for `rake greet[world]`. since we're not relying on Rake's
-      # limited option-handling support, we have no use for that here, so we
-      # simply replace it with the test data.
+      # pass the test object as the `file(...) { ... }` block's second
+      # argument. Rake passes an instance of +Rake::TaskArguments+, a Hash-like
+      # object which provides access to the command-line arguments for a Rake
+      # task e.g. { name: "world" } for `rake greet[world]`. since we're not
+      # relying on Rake's limited option-handling support, we have no use for
+      # that here, so we simply replace it with the test data.
       wrapper = ->(task, _) { yield(task, test) }
 
       # declare the prerequisites for the target file.
@@ -138,8 +138,8 @@ module StartupTime
     end
 
     # ensure each file in the source directory is mirrored to the build
-    # directory, and add each task which ensures this as a prerequisite
-    # of the master task (:build)
+    # directory, and add each task which ensures this as a prerequisite of the
+    # master task (:build)
     def copy_source_files
       Dir["#{SRC_DIR}/*.*"].each do |path|
         filename = File.basename(path)
@@ -153,7 +153,7 @@ module StartupTime
     end
 
     # run a shell command (string) by substituting the compiler path, source
-    # file, and target file into the supplied template and executing the
+    # file, and target file into the supplied template string and executing the
     # resulting command with the test's (optional) environment hash
     def run(template, task, test)
       replacements = {
@@ -192,11 +192,12 @@ module StartupTime
       end
 
       if java_native
-        javac = compile_if(:javac, force: true) do |task, test|
+        javac = compile_if(:javac, connect: false, force: true) do |task, test|
           run('%{compiler} -d . %{source}', task, test)
         end
 
         if javac
+          task java_native => javac
           task :build => java_native
         end
       else
