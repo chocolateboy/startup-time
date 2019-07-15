@@ -49,8 +49,8 @@ $ startup-time --only jvm
 # only run tests which finish quickly
 $ startup-time --only fast --omit slow-compile
 
-# increase the number of times each test is run (default: 10)
-$ startup-time --count 100
+# minimum number of seconds to run the test suite for (default: 5)
+$ startup-time --time 10
 ```
 
 ### Sample Output
@@ -106,7 +106,7 @@ USAGE:
 
 OPTIONS:
 
-    -c, --count, --rounds INTEGER    The number of times to run each test
+    -c, --count, --rounds INTEGER    The number of times to run each program
         --clean                      Remove the build directory and exit
                                      (targets will be recompiled on the next run)
     -d, --dir PATH                   Specify the build directory
@@ -117,8 +117,8 @@ OPTIONS:
     -o, --only LIST                  Only run the specified tests (comma-separated list of IDs/groups)
     -O, --omit LIST                  Don't run the specified tests (comma-separated list of IDs/groups)
     -q, --quiet                      Suppress all inessential output
-    -t, --time INTEGER               The minimum number of seconds to run the tests for
-                                     (minimum: 2s, default: 5s)
+    -t, --time INTEGER               The minimum number of seconds to run the test suite for
+                                     (minimum: 2, default: 5)
     -v, --verbose                    Enable verbose logging
     -V, --version                    Display the version and exit
 ```

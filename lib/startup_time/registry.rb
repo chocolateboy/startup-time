@@ -4,7 +4,6 @@ require 'active_support'
 require 'active_support/core_ext/hash/indifferent_access'
 require 'active_support/core_ext/hash/slice' # XXX in core since 2.5
 require 'set'
-require 'shellwords'
 require 'yaml'
 
 module StartupTime
@@ -35,10 +34,16 @@ module StartupTime
       end
     end
 
-    # returns a hash which maps test-ID keys (e.g. "scala") to their
-    # corresponding group names (e.g. "compiled, jvm, slow")
-    def self.ids_to_groups
-      TESTS.entries.map { |id, test| [id, test[:groups].sort.join(', ')] }
+    # a hash which maps test IDs (e.g. "scala") to their corresponding group
+    # names (e.g. ["compiled", "jvm", "slow"])
+    def self.ids_to_groups(format: :ascii)
+      if format == :json
+        TESTS.entries.each_with_object({}) do |(id, test), target|
+          target[id] = test[:groups].sort
+        end
+      else # ASCII
+        TESTS.entries.map { |id, test| [id, test[:groups].sort.join(', ')] }
+      end
     end
 
     def initialize

@@ -14,7 +14,7 @@ module StartupTime
 
     Spec = Value.new(:type, :value)
 
-    attr_reader :action, :build_dir, :format, :rounds, :spec, :verbosity
+    attr_reader :action, :build_dir, :format, :rounds, :verbosity
 
     include Services.mixin %i[registry]
 
@@ -29,8 +29,10 @@ module StartupTime
       @verbosity = :default
 
       parse! args
+    end
 
-      @spec = if @rounds
+    def spec
+      @spec ||= if @rounds
         Spec.with(type: :count, value: @rounds)
       else
         Spec.with(type: :duration, value: @duration)
@@ -53,7 +55,7 @@ module StartupTime
           '--count',
           '--rounds INTEGER',
           Integer,
-          'The number of times to run each test'
+          'The number of times to run each program'
         ) do |value|
           @rounds = value
         end

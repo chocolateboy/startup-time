@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'benchmark'
+require 'json'
 require 'komenda'
 require 'shellwords' # for Array#shelljoin
 require 'tty/table'
@@ -20,10 +21,11 @@ module StartupTime
 
     include FileUtils # for `sh`
     include Util # for `which`
-    include Services.mixin %i[builder ids_to_groups selected_tests]
+    include Services.mixin %i[builder selected_tests]
 
     def initialize(args = ARGV)
       @options = Options.new(args)
+      @json = @options.format == :json
       @verbosity = @options.verbosity
       @times = []
 
@@ -37,20 +39,15 @@ module StartupTime
     # or print a help message) or the default command, which runs
     # the selected benchmark-tests
     def run
-      if @verbosity == :verbose
-        # used by StartupTime::App#time to dump the command line
-        require 'shellwords'
-      end
-
       case @options.action
       when :clean
         builder.clean!
       when :help
         puts @options.usage
-      when :show_ids
-        puts render_ids_to_groups
       when :version
         puts VERSION
+      when :show_ids
+        render_ids_to_groups
       else
         benchmark
       end
@@ -76,7 +73,7 @@ module StartupTime
       runnable_tests = selected_tests.each_with_object([]) do |(id, test), tests|
         args = Array(test[:command])
 
-        if args.size == 1 # native executable
+        if args.length == 1 # native executable
           compiler = test[:compiler] || id
           path = File.absolute_path(args.first)
           next unless File.exist?(path)
@@ -95,10 +92,8 @@ module StartupTime
         }
       end
 
-      json = @options.format == :json
-
       if runnable_tests.empty?
-        puts '[]' if json
+        puts '[]' if @json
         return
       end
 
@@ -115,8 +110,7 @@ module StartupTime
 
       sorted = @times.sort_by { |result| result[:time] }
 
-      if json
-        require 'json'
+      if @json
         puts sorted.to_json
       else
         pairs = sorted.map { |result| [result[:name], '%.02f' % result[:time]] }
@@ -126,11 +120,15 @@ module StartupTime
       end
     end
 
-    # an ASCII table representation of the mapping from test IDs (e.g. "scala")
-    # to group IDs (e.g. "compiled, jvm, slow")
+    # print a JSON or ASCII-table representation of the mapping from test IDs
+    # (e.g. "scala") to group IDs (e.g. ["compiled", "jvm", "slow"])
     def render_ids_to_groups
-      table = TTY::Table.new(%w[Test Groups], ids_to_groups)
-      table.render
+      if @json
+        puts Registry.ids_to_groups(format: :json).to_json
+      else
+        table = TTY::Table.new(%w[Test Groups], Registry.ids_to_groups)
+        puts table.render
+      end
     end
 
     # takes a test configuration and measures how long it takes to execute the

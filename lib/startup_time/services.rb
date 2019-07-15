@@ -8,10 +8,6 @@ module StartupTime
     # the component responsible for managing the build directory
     once(:builder) { Builder.new }
 
-    # a hash which maps test IDs (e.g. "scala") to group names
-    # (e.g. "compiled, jvm, slow")
-    once(:ids_to_groups) { Registry.ids_to_groups }
-
     # an interface to the tests configured in resources/tests.yaml
     once(:registry) { Registry.new }
 
