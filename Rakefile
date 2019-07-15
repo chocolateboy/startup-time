@@ -6,10 +6,6 @@ require 'bundler/setup'
 NO_TEST = %w[slow slow-compile].join(',')
 GEMSPEC = Gem::Specification.load('startup-time.gemspec')
 
-# prepend the :test task to the release task's prerequisites
-# FIXME this is still being run *after* the gem is published!
-Rake::Task[:release].enhance([:test])
-
 # an alternative to bundler's :install task which installs the dependencies, builds
 # the documentation, and honors --user-install
 desc 'Install %s and its dependencies into the system gems' % GEMSPEC.name
@@ -30,5 +26,8 @@ task :test => %i[build lint] do
   sh 'startup-time --clean'
   sh "startup-time --omit #{NO_TEST} --verbose"
 end
+
+# run the test before release
+task :release => :test
 
 task :default => :test
