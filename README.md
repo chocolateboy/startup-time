@@ -49,8 +49,11 @@ $ startup-time --only jvm
 # only run tests which finish quickly
 $ startup-time --only fast --omit slow-compile
 
-# minimum number of seconds to run the test suite for (default: 5)
+# run the test suite for at least 10 seconds (default: 5)
 $ startup-time --time 10
+
+# run each program 10 times
+$ startup-time --count 10
 ```
 
 ### Sample Output
