@@ -137,6 +137,7 @@ OPTIONS:
 
 ## SEE ALSO
 
+- [Gabriel439/bench](https://github.com/Gabriel439/bench) - a command-line benchmark tool written in Haskell
 - [gnustavo/startup-times](https://github.com/gnustavo/startup-times) - a script to investigate the startup times of several programming languages
 - [jwiegley/helloworld](https://github.com/jwiegley/helloworld) - a comparison of "Hello, world" startup times in various languages
 - [sharkdp/hyperfine](https://github.com/sharkdp/hyperfine) - a command-line benchmarking tool
