@@ -9,7 +9,7 @@ module StartupTime
   # overridden on the command line
   class Options
     BUILD_DIR = EnvPaths.get('startup-time', suffix: false).cache
-    DEFAULT_DURATION = 5
+    DEFAULT_DURATION = 10
     MINIMUM_DURATION = 2
 
     Spec = Value.new(:type, :value)

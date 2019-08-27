@@ -121,7 +121,7 @@ OPTIONS:
     -O, --omit LIST                  Don't run the specified tests (comma-separated list of IDs/groups)
     -q, --quiet                      Suppress all inessential output
     -t, --time INTEGER               The minimum number of seconds to run the test suite for
-                                     (minimum: 2, default: 5)
+                                     (minimum: 2, default: 10)
     -v, --verbose                    Enable verbose logging
     -V, --version                    Display the version and exit
 ```
