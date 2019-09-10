@@ -313,3 +313,12 @@ truffle-ruby:
   command:
     - truffleruby
     - hello.rb
+
+wren:
+  name: Wren
+  groups:
+    - fast
+    - script
+  command:
+    - wren
+    - hello.wren

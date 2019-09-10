@@ -65,24 +65,25 @@ $ startup-time --count 10
     LuaJIT                     0.64
     Go                         0.66
     Rust                       0.67
+    JavaScript (QuickJS)       0.83
     D (DMD)                    0.88
-    JavaScript (QuickJS)       0.92
-    Lua                        0.98
+    Lua                        0.94
+    Java Native (GraalVM)      0.99
     D (GDC)                    1.10
     Haskell (GHC)              1.14
-    C++ (g++)                  1.22
-    Crystal                    1.63
+    Wren                       1.14
+    C++ (g++)                  1.19
+    Crystal                    1.55
     Perl                       1.66
-    Java Native (GraalVM)      1.95
-    Bash                       2.67
+    Bash                       2.63
+    JavaScript (GraalVM)       3.88
     JavaScript (Deno)         11.15
     Python 3                  22.09
-    JavaScript (GraalVM)      32.38
+    Ruby (TruffleRuby)        33.59
     JavaScript (Node.js)      35.20
     Python 2                  43.43
     Java                      54.59
-    Ruby                      67.40
-    Ruby (TruffleRuby)        81.77
+    Ruby                      68.68
     Kotlin                   103.02
     Scala                    801.21
 
