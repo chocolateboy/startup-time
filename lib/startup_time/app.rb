@@ -167,12 +167,14 @@ module StartupTime
           version ||= '%{compiler} --version' if compiler
           version ||= '%{interpreter} --version' if interpreter
 
-          version_command = version % {
-            compiler: compiler || interpreter,
-            interpreter: interpreter,
-          }
+          Array(version).each do |version_|
+            version_command = version_ % {
+              compiler: compiler || interpreter,
+              interpreter: interpreter,
+            }
 
-          sh version_command
+            sh version_command
+          end
         end
       end
 

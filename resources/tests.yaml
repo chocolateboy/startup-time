@@ -112,7 +112,6 @@ graalvm-js:
   groups:
     - js
     - script
-  version: '%{compiler} --version'
   command:
     - js
     - hello.js
@@ -125,7 +124,9 @@ javac:
     - jvm
   source: HelloJava.java
   compile: '%{compiler} -d . %{source}'
-  version: '%{compiler} -version' # we could dump the interpeter version as well/instead
+  version:
+    - '%{compiler} -version'
+    - '%{interpreter} -version 2>&1 | head -n1'
   command:
     - java
     - HelloJava
@@ -311,7 +312,6 @@ truffle-ruby:
   groups:
     - rubies
     - script
-  version: '%{compiler} --version'
   command:
     - truffleruby
     - hello.rb
