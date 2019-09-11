@@ -1,3 +1,10 @@
+## 1.3.0 - TBD
+
+- bump the default minimum duration from 5s to 10s
+- disable the Java tests (javac, java-native) if `java` is installed but
+  `javac` isn't
+- add [Wren](http://wren.io/)
+
 ## 1.2.0 - 2019-07-15
 
 - add -t/--time option specifying the minimum length of time to run tests for
@@ -6,7 +13,7 @@
 
 ## 1.1.1 - 2019-07-13
 
-- add QuickJS
+- add [QuickJS](https://bellard.org/quickjs/)
 - update deno version command
 
 ## 1.1.0 - 2019-02-27

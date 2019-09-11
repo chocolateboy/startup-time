@@ -21,6 +21,7 @@ crystal:
     - slow-compile
   source: hello.cr
   compile: '%{compiler} build --release -o %{target} %{source}'
+  version: '%{compiler} --version | head -n1'
   command: hello.cr.out
   env:
       CRYSTAL_CACHE_DIR: .crystal
@@ -123,7 +124,8 @@ javac:
     - java
     - jvm
   source: HelloJava.java
-  version: '%{compiler} -version'
+  compile: '%{compiler} -d . %{source}'
+  version: '%{compiler} -version' # we could dump the interpeter version as well/instead
   command:
     - java
     - HelloJava

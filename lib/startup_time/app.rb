@@ -64,35 +64,9 @@ module StartupTime
     def benchmark
       builder.build!
 
-      # run a test if:
-      #
-      #   - its interpreter exists
-      #   - it's a compiled executable (i.e. its compiler exists)
-      #
-      # otherwise, skip it
-      runnable_tests = selected_tests.each_with_object([]) do |(id, test), tests|
-        args = Array(test[:command])
+      tests = runnable_tests
 
-        if args.length == 1 # native executable
-          compiler = test[:compiler] || id
-          path = File.absolute_path(args.first)
-          next unless File.exist?(path)
-        else # interpreter + source
-          compiler = args.first
-          path = which(compiler)
-          next unless path
-        end
-
-        tests << {
-          id: id,
-          test: test,
-          args: args,
-          compiler: compiler,
-          path: path,
-        }
-      end
-
-      if runnable_tests.empty?
+      if tests.empty?
         puts '[]' if @json
         return
       end
@@ -100,12 +74,11 @@ module StartupTime
       spec = @options.spec
 
       if spec.type == :duration
-        spec = spec.with(value: spec.value.to_f / runnable_tests.length)
+        spec = spec.with(value: spec.value.to_f / tests.length)
       end
 
-      runnable_tests.shuffle.each do |config|
-        config[:spec] = spec
-        time(config)
+      tests.shuffle.each do |test|
+        time(spec, test)
       end
 
       sorted = @times.sort_by { |result| result[:time] }
@@ -131,9 +104,54 @@ module StartupTime
       end
     end
 
+    # return the subset of selected tests that are runnable.
+    #
+    # a test is runnable if these requirements are met:
+    #
+    #   - (if it's interpreted): the interpreter exists
+    #   - (if it's compiled): the compiler exists
+    #
+    # otherwise, skip it
+    #
+    # the compiler path is resolved in the builder, which can also disable a test
+    # (by setting test[:disabled] = true) if the compilation prerequisites aren't
+    # installed
+    #
+    # note that some tests are both interpreted and compiled, so both the
+    # compiler and the interpreter must exist, e.g.:
+    #
+    #   - interpreter: java
+    #   - compiler: javac
+
+    def runnable_tests
+      selected_tests.each_with_object([]) do |(id, test), tests|
+        next if test[:disabled]
+
+        args = Array(test[:command])
+        compiler = test[:compiler]
+
+        if args.length == 1 # native executable
+          executable = File.absolute_path(args.first)
+          next unless File.exist?(executable)
+        else # interpreter + source/bytecode
+          executable = which(args.first)
+          next unless (interpreter = executable)
+        end
+
+        tests << {
+          args:        args,
+          compiler:    compiler,
+          executable:  executable,
+          id:          id,
+          interpreter: interpreter,
+          test:        test,
+        }
+      end
+    end
+
     # takes a test configuration and measures how long it takes to execute the
     # test
-    def time(id:, test:, args:, compiler:, path:, spec:)
+    def time(spec, args:, compiler:, executable:, id:, interpreter:, test:)
       # dump the compiler/interpreter's version if running in verbose mode
       if @verbosity == :verbose
         puts
@@ -144,19 +162,22 @@ module StartupTime
         version = test[:version]
 
         unless version == false
-          version ||= '%{compiler} --version'
+          # if the test is both interpreted and compiled, default to
+          # dumping the compiler version
+          version ||= '%{compiler} --version' if compiler
+          version ||= '%{interpreter} --version' if interpreter
 
-          # the compiler may have been uninstalled since the target was
-          # built, so make sure it still exists
-          if (compiler_path = which(compiler))
-            version_command = version % { compiler: compiler_path }
-            sh version_command
-          end
+          version_command = version % {
+            compiler: compiler || interpreter,
+            interpreter: interpreter,
+          }
+
+          sh version_command
         end
       end
 
       argv0 = args.shift
-      command = [path, *args]
+      command = [executable, *args]
 
       unless @verbosity == :quiet
         if @verbosity == :verbose
@@ -190,7 +211,7 @@ module StartupTime
 
           loop do
             time = Benchmark.realtime do
-              system([path, argv0], *args, out: File::NULL)
+              system([executable, argv0], *args, out: File::NULL)
             end
 
             elapsed = Time.now - start
@@ -201,7 +222,7 @@ module StartupTime
         else # how many times to run the tests
           spec.value.times do
             times << Benchmark.realtime do
-              system([path, argv0], *args, out: File::NULL)
+              system([executable, argv0], *args, out: File::NULL)
             end
           end
         end

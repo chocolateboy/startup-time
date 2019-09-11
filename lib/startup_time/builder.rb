@@ -1,8 +1,13 @@
 # frozen_string_literal: true
 
 require 'rake'
+require 'set'
 require 'shellwords'
+
+require_relative 'refinements'
 require_relative 'util'
+
+using StartupTime::Refinements
 
 module StartupTime
   # StartupTime::Builder - clean and prepare the build directory
@@ -16,6 +21,11 @@ module StartupTime
   # once these tasks are complete, everything required to run the benchmark tests
   # will be available in the build directory
   class Builder
+    CUSTOM_COMPILER = {
+      'kotlinc-native': :compile_kotlinc_native,
+      'java-native': :compile_java_native,
+    }
+
     SRC_DIR = File.absolute_path('../../resources/src', __dir__)
 
     include Rake::DSL
@@ -23,15 +33,10 @@ module StartupTime
     include Services.mixin %i[options selected_tests]
 
     def initialize
-      @verbosity = options.verbosity
       @build_dir = options.build_dir
+      @verbosity = options.verbosity
 
       Rake.verbose(@verbosity != :quiet)
-    end
-
-    # remove the build directory and its contents
-    def clean!
-      rm_rf @build_dir
     end
 
     # ensure the build directory is in a fit state to run the tests i.e. copy
@@ -47,26 +52,12 @@ module StartupTime
       Rake::Task[:build].invoke
     end
 
-    private
-
-    # a wrapper for Rake's +FileUtils#sh+ method (which wraps +Kernel#spawn+)
-    # which allows the command's environment to be included in the final options
-    # hash rather than cramming it in as the first argument i.e.:
-    #
-    # before:
-    #
-    #   sh FOO_VERBOSE: "0", "foo -c hello.foo -o hello", out: File::NULL
-    #
-    # after:
-    #
-    #   shell "foo -c hello.foo -o hello", env: { FOO_VERBOSE: "0" }, out: File::NULL
-    #
-    def shell(args, **options)
-      args = Array(args) # args is a string or array
-      env = options.delete(:env)
-      args.unshift(env) if env
-      sh(*args, options)
+    # remove the build directory and its contents
+    def clean!
+      rm_rf @build_dir
     end
+
+    private
 
     # a conditional version of Rake's `file` task which compiles a source file to
     # a target file via the block provided. if the compiler isn't installed, the
@@ -88,6 +79,12 @@ module StartupTime
 
       return unless (compiler_path = which(compiler))
 
+      # update the test spec's compiler field to point to the compiler's
+      # absolute path
+      #
+      # XXX mutation/side-effect
+      test[:compiler] = compiler_path
+
       # the source filename must be supplied
       source = test.fetch(:source)
 
@@ -97,16 +94,12 @@ module StartupTime
 
         if command.length == 1
           target = command.first
-        elsif source.match?(/^[A-Z]/) # JVM language
+        elsif source.match?(/\A[A-Z]/) # JVM language
           target = source.pathmap('%n.class')
         else # native executable
           target = '%s.out' % source
         end
       end
-
-      # update the test spec's compiler field to point to the compiler's
-      # absolute path (which may be mocked)
-      test = test.merge(compiler: compiler_path)
 
       # pass the test object as the `file(...) { ... }` block's second
       # argument. Rake passes an instance of +Rake::TaskArguments+, a Hash-like
@@ -119,22 +112,96 @@ module StartupTime
       # declare the prerequisites for the target file.
       # compiler_path: recompile if the compiler has been
       # updated since the target was last built
-      file(target => [source, compiler_path], &wrapper)
+      file_task = file(target => [source, compiler_path], &wrapper)
 
-      # add the target file to the build task
-      task :build => target
+      # register the task under the supplied ID so it can be referenced by name
+      # rather than by filename
+      compile_task = task(id => file_task)
 
-      target
+      # add the task which builds the target file to the build task as a
+      # prerequisite
+      # task(:build => target) unless options[:connect] == false
+      task(:build => compile_task) unless options[:connect] == false
+
+      compile_task
     end
 
-    # register the prerequisites of the :build task. creates file tasks which:
-    #
-    # a) keep the build directory sources in sync with the source directory
-    # b) rebuild target files if their source files are modified
-    # c) rebuild target files if their compilers are updated
-    def register_tasks
-      copy_source_files
-      compile_target_files
+    # native-image compiles .class files to native binaries. it differs from
+    # the other tasks because it depends on a target file rather than a
+    # source file i.e. it depends on the target of the javac task
+    def compile_java_native
+      java_native = compile_if('java-native', connect: false) do |t, test|
+        # XXX native-image doesn't provide a way to silence its output, so
+        # send it to /dev/null
+        shell [test[:compiler], "-H:Name=#{t.target}", '--no-server', '-O1', t.source.ext], {
+          out: File::NULL
+        }
+      end
+
+      return unless java_native # return a falsey value i.e. disable the test
+
+      javac = Rake.application.lookup(:javac) || begin
+        compile_if(:javac, connect: false, force: true) do |task, test|
+          run(test[:compile], task, test)
+        end
+      end
+
+      return unless javac # disable this test if javac is not available
+
+      # prepend the javac task to this task as a prerequisite
+      java_native.prepend(javac)
+
+      # register this task as a dependency of the root (:build) task
+      task(:build => java_native)
+
+      # uncomment this to see the dependency graph
+      # pp Rake::Task.tasks
+
+      java_native
+    end
+
+    # implement the compilation step for the kotlinc-native test manually. we
+    # need to do this to work around the compiler's non-standard behavior
+    def compile_kotlinc_native
+      compile_if 'kotlinc-native' do |t, test|
+        # XXX kotlinc-native doesn't provide a way to silence
+        # its debug messages, so file them under /dev/null
+        shell %W[#{test[:compiler]} -opt -o #{t.target} #{t.source}], out: File::NULL
+
+        # XXX work around a kotlinc-native "feature"
+        # https://github.com/JetBrains/kotlin-native/issues/967
+        exe = "#{t.target}.kexe" # XXX or .exe, or...
+        verbose(@verbosity == :verbose) { mv exe, t.target } if File.exist?(exe)
+      end
+    end
+
+    # make sure the target files (e.g. native executables and JVM .class files)
+    # are built if their compilers are installed
+    def compile_target_files
+      selected_tests.each do |id, test|
+        enabled = true
+
+        # handle the tests which have compile templates by a) turning them into
+        # blocks which substitute the compiler, source file and target file into
+        # the corresponding placeholders in the template, then b) executing the
+        # resulting command via +shell+
+
+        if (command = test[:compile])
+          block = ->(task, test_) { run(command, task, test_) }
+          enabled = compile_if(id, &block)
+        end
+
+        test[:disabled] = !enabled
+      end
+
+      # do these after the main pass so they can reuse tasks (if available)
+      # e.g. the javac task
+
+      CUSTOM_COMPILER.each do |id, meth|
+        selected_tests[id].tap do |test|
+          test[:disabled] = !send(meth) if test
+        end
+      end
     end
 
     # ensure each file in the source directory is mirrored to the build
@@ -152,6 +219,16 @@ module StartupTime
       end
     end
 
+    # register the prerequisites of the :build task. creates file tasks which:
+    #
+    # a) keep the build directory sources in sync with the source directory
+    # b) rebuild target files if their source files are modified
+    # c) rebuild target files if their compilers are updated
+    def register_tasks
+      copy_source_files
+      compile_target_files
+    end
+
     # run a shell command (string) by substituting the compiler path, source
     # file, and target file into the supplied template string and executing the
     # resulting command with the test's (optional) environment hash
@@ -159,63 +236,30 @@ module StartupTime
       replacements = {
         compiler: Shellwords.escape(test[:compiler]),
         source: Shellwords.escape(task.source),
-        target: Shellwords.escape(task.name),
+        target: Shellwords.escape(task.target),
       }
 
       command = template % replacements
       shell(command, env: test[:env])
     end
 
-    # make sure the target files (e.g. native executables and JVM .class files)
-    # are built if their compilers are installed
-    def compile_target_files
-      # handle the tests which have compile templates by turning them into
-      # blocks which substitute the compiler, source file and target file into
-      # the corresponding placeholders in the template and then execute the
-      # command via `shell`
-      selected_tests.each do |id, selected|
-        if (command = selected[:compile])
-          block = ->(task, test) { run(command, task, test) }
-          compile_if(id, &block)
-        end
-      end
-
-      # native-image compiles .class files to native binaries. it differs from
-      # the other tasks because it depends on a target file rather than a
-      # source file i.e. it depends on the target of the javac task
-      java_native = compile_if('java-native', connect: false) do |t, test|
-        # XXX native-image doesn't provide a way to silence its output, so
-        # send it to /dev/null
-        shell [test[:compiler], "-H:Name=#{t.name}", '--no-server', '-O1', t.source.ext], {
-          out: File::NULL
-        }
-      end
-
-      if java_native
-        javac = compile_if(:javac, connect: false, force: true) do |task, test|
-          run('%{compiler} -d . %{source}', task, test)
-        end
-
-        if javac
-          task java_native => javac
-          task :build => java_native
-        end
-      else
-        compile_if :javac do |task, test|
-          run('%{compiler} -d . %{source}', task, test)
-        end
-      end
-
-      compile_if 'kotlinc-native' do |t, test|
-        # XXX kotlinc-native doesn't provide a way to silence
-        # its debug messages, so file them under /dev/null
-        shell %W[#{test[:compiler]} -opt -o #{t.name} #{t.source}], out: File::NULL
-
-        # XXX work around a kotlinc-native "feature"
-        # https://github.com/JetBrains/kotlin-native/issues/967
-        exe = "#{t.name}.kexe" # XXX or .exe, or...
-        verbose(@verbosity == :verbose) { mv exe, t.name } if File.exist?(exe)
-      end
+    # a wrapper for Rake's +FileUtils#sh+ method (which wraps +Kernel#spawn+)
+    # which allows the command's environment to be included in the final options
+    # hash rather than cramming it in as the first argument i.e.:
+    #
+    # before:
+    #
+    #   sh FOO_VERBOSE: "0", "foo -c hello.foo -o hello", out: File::NULL
+    #
+    # after:
+    #
+    #   shell "foo -c hello.foo -o hello", env: { FOO_VERBOSE: "0" }, out: File::NULL
+    #
+    def shell(args, **options)
+      args = Array(args) # args is a string or array
+      env = options.delete(:env)
+      args.unshift(env) if env
+      sh(*args, options)
     end
   end
 end
