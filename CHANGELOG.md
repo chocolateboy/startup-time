@@ -1,4 +1,4 @@
-## 1.3.0 - TBD
+## 1.3.0 - 2019-09-11
 
 - bump the default minimum duration from 5s to 10s
 - disable the Java tests (javac, java-native) if `java` is installed but

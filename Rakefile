@@ -3,6 +3,10 @@
 require 'bundler/gem_tasks'
 require 'bundler/setup'
 
+require 'startup_time/refinements'
+
+using StartupTime::Refinements # Rake refinements e.g. Task#prepend
+
 NO_TEST = %w[slow slow-compile].join(',')
 GEMSPEC = Gem::Specification.load('startup-time.gemspec')
 
@@ -28,6 +32,6 @@ task :test => %i[build lint] do
 end
 
 # run the test before release
-task :release => :test
+Rake::Task[:release].prepend(:test)
 
 task :default => :test
