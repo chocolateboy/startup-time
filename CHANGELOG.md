@@ -1,3 +1,15 @@
+## 1.4.0.0 - TBD
+
+**Breaking Changes**:
+
+- renamed some IDs/groups:
+
+  - quickjs -> qjs
+  - rubies  -> ruby
+  - ruby    -> mri
+
+- changed versioning from major.minor.patch -> marketing.breaking.fix.feature
+
 ## 1.3.0 - 2019-09-11
 
 - bump the default minimum duration from 5s to 10s

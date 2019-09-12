@@ -110,6 +110,7 @@ go:
 graalvm-js:
   name: JavaScript (GraalVM)
   groups:
+    - fast
     - js
     - script
   command:
@@ -153,7 +154,7 @@ kotlinc-native:
     - slow-compile
   source: HelloKotlin.kt
   compiler: konanc
-  version: '%{compiler} -version'
+  version: '%{compiler} -version 2>&1 | head -n1'
   command: hello.kt.out
 
 kotlinc:
@@ -204,6 +205,15 @@ luajit:
     - luajit
     - hello.lua
 
+mri:
+  name: Ruby
+  groups:
+    - ruby
+    - script
+  command:
+    - ruby
+    - hello.rb
+
 nim:
   name: Nim
   groups:
@@ -224,7 +234,7 @@ node:
     - node
     - hello.js
 
-quickjs:
+qjs:
   name: JavaScript (QuickJS)
   groups:
     - fast
@@ -274,15 +284,6 @@ python3:
     - python3
     - hello.py
 
-ruby:
-  name: Ruby
-  groups:
-    - rubies
-    - script
-  command:
-    - ruby
-    - hello.rb
-
 rustc:
   name: Rust
   groups:
@@ -310,7 +311,7 @@ scalac:
 truffle-ruby:
   name: Ruby (TruffleRuby)
   groups:
-    - rubies
+    - ruby
     - script
   command:
     - truffleruby

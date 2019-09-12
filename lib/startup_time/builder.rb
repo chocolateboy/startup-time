@@ -63,8 +63,7 @@ module StartupTime
     # a target file via the block provided. if the compiler isn't installed, the
     # task is skipped.
     #
-    # returns a truthy value (the target filename) if the task is created, or nil
-    # otherwise
+    # returns a truthy value (the task) if the task is created, or nil otherwise
     def compile_if(id, **options)
       tests = options[:force] ? Registry::TESTS : selected_tests
 
@@ -81,9 +80,7 @@ module StartupTime
 
       # update the test spec's compiler field to point to the compiler's
       # absolute path
-      #
-      # XXX mutation/side-effect
-      test[:compiler] = compiler_path
+      test[:compiler] = compiler_path # XXX mutation/side-effect
 
       # the source filename must be supplied
       source = test.fetch(:source)
@@ -115,12 +112,11 @@ module StartupTime
       file_task = file(target => [source, compiler_path], &wrapper)
 
       # register the task under the supplied ID so it can be referenced by name
-      # rather than by filename
+      # by other tasks
       compile_task = task(id => file_task)
 
       # add the task which builds the target file to the build task as a
       # prerequisite
-      # task(:build => target) unless options[:connect] == false
       task(:build => compile_task) unless options[:connect] == false
 
       compile_task
@@ -140,6 +136,7 @@ module StartupTime
 
       return unless java_native # return a falsey value i.e. disable the test
 
+      # XXX don't use Rake::Task[:name] here as that autovivifies the task!
       javac = Rake.application.lookup(:javac) || begin
         compile_if(:javac, connect: false, force: true) do |task, test|
           run(test[:compile], task, test)
@@ -148,10 +145,10 @@ module StartupTime
 
       return unless javac # disable this test if javac is not available
 
-      # prepend the javac task to this task as a prerequisite
+      # prepend the javac task to this task's prerequisites
       java_native.prepend(javac)
 
-      # register this task as a dependency of the root (:build) task
+      # register this task as a prerequisite of the root (:build) task
       task(:build => java_native)
 
       # uncomment this to see the dependency graph
@@ -160,18 +157,23 @@ module StartupTime
       java_native
     end
 
-    # implement the compilation step for the kotlinc-native test manually. we
-    # need to do this to work around the compiler's non-standard behavior
+    # implement the compilation step for the kotlinc-native test. we have to do
+    # this manually to work around the compiler's non-standard behavior
     def compile_kotlinc_native
       compile_if 'kotlinc-native' do |t, test|
         # XXX kotlinc-native doesn't provide a way to silence
         # its debug messages, so file them under /dev/null
-        shell %W[#{test[:compiler]} -opt -o #{t.target} #{t.source}], out: File::NULL
+        shell [test[:compiler], '-opt', '-o', t.target, t.source], {
+          out: File::NULL
+        }
 
         # XXX work around a kotlinc-native "feature"
         # https://github.com/JetBrains/kotlin-native/issues/967
         exe = "#{t.target}.kexe" # XXX or .exe, or...
-        verbose(@verbosity == :verbose) { mv exe, t.target } if File.exist?(exe)
+
+        if File.exist?(exe)
+          verbose(@verbosity == :verbose) { mv exe, t.target }
+        end
       end
     end
 
@@ -191,15 +193,16 @@ module StartupTime
           enabled = compile_if(id, &block)
         end
 
-        test[:disabled] = !enabled
+        test[:disabled] = !enabled # XXX mutation/side-effect
       end
 
       # do these after the main pass so they can reuse tasks (if available)
       # e.g. the javac task
 
-      CUSTOM_COMPILER.each do |id, meth|
+      CUSTOM_COMPILER.each do |id, method_name|
         selected_tests[id].tap do |test|
-          test[:disabled] = !send(meth) if test
+          # XXX mutation/side-effect
+          test[:disabled] = !send(method_name) if test
         end
       end
     end
@@ -211,11 +214,11 @@ module StartupTime
       Dir["#{SRC_DIR}/*.*"].each do |path|
         filename = File.basename(path)
 
-        source = file(filename => path) do
+        copy_source_file = file(filename => path) do
           verbose(@verbosity == :verbose) { cp path, filename }
         end
 
-        task build: source
+        task(:build => copy_source_file)
       end
     end
 
