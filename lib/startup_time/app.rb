@@ -78,7 +78,7 @@ module StartupTime
       end
 
       tests.shuffle.each do |test|
-        time(spec, test)
+        time(spec, **test)
       end
 
       sorted = @times.sort_by { |result| result[:time] }
