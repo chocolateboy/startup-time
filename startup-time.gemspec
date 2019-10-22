@@ -30,7 +30,7 @@ Gem::Specification.new do |spec|
     'source_code_uri'   => 'https://github.com/chocolateboy/startup-time',
   }
 
-  spec.add_runtime_dependency 'activesupport', '~> 6.0'
+  spec.add_runtime_dependency 'activesupport', '~> 5.2'
   spec.add_runtime_dependency 'bundler', '~> 2.0'
   spec.add_runtime_dependency 'cli-pasta', '~> 2.0'
   spec.add_runtime_dependency 'env_paths', '~> 1.0'
