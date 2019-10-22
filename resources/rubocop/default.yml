@@ -8,15 +8,21 @@ AllCops:
     - '.bundle/**/*'
     - '.git/**/*'
     - '.rubocop/**/*'
+    - '*.rb'
+
+Layout/AlignHash:
+  # EnforcedHashRocketStyle: table
+  # EnforcedColonStyle: table
+  Enabled: false
+
+Layout/CaseIndentation:
+  EnforcedStyle: end
 
 Layout/EndAlignment:
   EnforcedStyleAlignWith: variable
 
-Layout/IndentHash:
+Layout/IndentFirstHashElement:
   EnforcedStyle: consistent
-
-Layout/MultilineMethodCallIndentation:
-  EnforcedStyle: indented
 
 Lint/NestedMethodDefinition:
   Enabled: false
@@ -31,7 +37,8 @@ Naming/FileName:
     - '**/Rakefile'
 
 Naming/HeredocDelimiterNaming:
-    Enabled: false
+  Blacklist:
+    - '(?:END|EOF)'
 
 Security/Eval:
   Enabled: false
@@ -58,11 +65,13 @@ Style/FormatStringToken:
 
 Style/HashSyntax:
   EnforcedStyle: ruby19
-  PreferHashRocketsForNonAlnumEndingSymbols: false
   Exclude:
     - '**/Rakefile'
 
 Style/IfUnlessModifier:
+  Enabled: false
+
+Style/MultilineBlockChain:
   Enabled: false
 
 Style/MutableConstant:
@@ -75,6 +84,12 @@ Style/NestedTernaryOperator:
   Enabled: false
 
 Style/PercentLiteralDelimiters:
+  Enabled: false
+
+Style/SpecialGlobalVars:
+  Enabled: false
+
+Style/StderrPuts:
   Enabled: false
 
 Style/TernaryParentheses:
