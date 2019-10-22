@@ -19,7 +19,7 @@
 
 ## 1.2.0 - 2019-07-15
 
-- add -t/--time option specifying the minimum length of time to run tests for
+- add -t/--time option to specify the minimum length of time to run tests for
  (default: 5s)
 - format the ID -> group table as JSON if the --json option is provided
 

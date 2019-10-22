@@ -29,7 +29,10 @@ module StartupTime
       end
 
       test[:groups].each do |group|
-        abort "invalid test spec (#{id}): group ID (#{group}) conflicts with test ID" if TESTS[group]
+        if TESTS[group]
+          abort "invalid test spec (#{id}): group ID (#{group}) conflicts with test ID"
+        end
+
         GROUPS[group] << id
       end
     end
@@ -75,14 +78,12 @@ module StartupTime
     # of test IDs belonging to the group is returned.
     def ids_for(id)
       if TESTS[id]
-        ids = [id]
+        [id]
       elsif GROUPS.key?(id)
-        ids = GROUPS[id]
+        GROUPS[id]
       else
         abort "Can't resolve IDs for: #{id.inspect}"
       end
-
-      ids
     end
   end
 end

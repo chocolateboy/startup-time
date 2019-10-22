@@ -49,8 +49,8 @@ $ startup-time --only jvm
 # only run tests which finish quickly
 $ startup-time --only fast --omit slow-compile
 
-# run the test suite for at least 10 seconds (default: 5)
-$ startup-time --time 10
+# run the test suite for at least 10 seconds (default: 10)
+$ startup-time --time 30
 
 # run each program 10 times
 $ startup-time --count 10
@@ -69,8 +69,8 @@ $ startup-time --count 10
     D (DMD)                    0.88
     Lua                        0.94
     Java Native (GraalVM)      0.99
+    Haskell (GHC)              1.08
     D (GDC)                    1.10
-    Haskell (GHC)              1.14
     Wren                       1.14
     C++ (g++)                  1.19
     Crystal                    1.55
@@ -79,11 +79,11 @@ $ startup-time --count 10
     JavaScript (GraalVM)       3.88
     JavaScript (Deno)         11.15
     Python 3                  22.09
-    Ruby (TruffleRuby)        33.59
-    JavaScript (Node.js)      35.20
+    Ruby (TruffleRuby)        28.66
+    JavaScript (Node.js)      34.35
     Python 2                  43.43
     Java                      54.59
-    Ruby                      68.68
+    Ruby                      68.61
     Kotlin                   103.02
     Scala                    801.21
 
@@ -138,6 +138,7 @@ OPTIONS:
 
 ## SEE ALSO
 
+- [drujensen/fib](https://github.com/drujensen/fib) - a recursive Fibonacci benchmark for multiple languages
 - [Gabriel439/bench](https://github.com/Gabriel439/bench) - a command-line benchmark tool written in Haskell
 - [gnustavo/startup-times](https://github.com/gnustavo/startup-times) - a script to investigate the startup times of several programming languages
 - [jwiegley/helloworld](https://github.com/jwiegley/helloworld) - a comparison of "Hello, world" startup times in various languages

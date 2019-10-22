@@ -134,7 +134,7 @@ module StartupTime
           '-t',
           '--time INTEGER',
           Integer,
-          'Specify the minimum number of seconds to run tests for',
+          'Specify the minimum number of seconds to run the test suite for',
           "(minimum: #{MINIMUM_DURATION}, default: #{DEFAULT_DURATION})"
         ) do |value|
           @duration = [value, MINIMUM_DURATION].max
