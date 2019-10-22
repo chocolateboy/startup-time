@@ -30,19 +30,19 @@ Gem::Specification.new do |spec|
     'source_code_uri'   => 'https://github.com/chocolateboy/startup-time',
   }
 
-  spec.add_runtime_dependency 'activesupport', '~> 5.2'
+  spec.add_runtime_dependency 'activesupport', '~> 6.0'
   spec.add_runtime_dependency 'bundler', '~> 2.0'
-  spec.add_runtime_dependency 'cli-pasta', '~> 2.0.0'
-  spec.add_runtime_dependency 'env_paths', '~> 1.0.0'
+  spec.add_runtime_dependency 'cli-pasta', '~> 2.0'
+  spec.add_runtime_dependency 'env_paths', '~> 1.0'
   spec.add_runtime_dependency 'komenda', '~> 0.1.8'
 
   # we need at least 11.2, which includes "spawn options for sh"
-  spec.add_runtime_dependency 'rake', '~> 12.0'
+  spec.add_runtime_dependency 'rake', '~> 13.0'
 
-  spec.add_runtime_dependency 'tty-table', '~> 0.10.0'
-  spec.add_runtime_dependency 'tty-which', '~> 0.4.0'
+  spec.add_runtime_dependency 'tty-table', '~> 0.11'
+  spec.add_runtime_dependency 'tty-which', '~> 0.4'
   spec.add_runtime_dependency 'values', '~> 1.8'
   spec.add_runtime_dependency 'wireless', '~> 0.0.2'
 
-  spec.add_development_dependency 'rubocop', '~> 0.65.0'
+  spec.add_development_dependency 'rubocop', '~> 0.75'
 end
