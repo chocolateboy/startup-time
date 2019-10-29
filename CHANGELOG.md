@@ -3,12 +3,11 @@
 **Breaking Changes**:
 
 - renamed some IDs/groups:
-
   - quickjs -> qjs
   - rubies  -> ruby
   - ruby    -> mri
-
 - changed versioning from major.minor.patch -> marketing.breaking.fix.feature
+- log the number of rounds for each test in verbose mode
 
 ## 1.3.0 - 2019-09-11
 

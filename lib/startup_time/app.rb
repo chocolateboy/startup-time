@@ -210,8 +210,11 @@ module StartupTime
           duration = spec.value
           elapsed = 0
           start = Time.now
+          rounds = 0
 
           loop do
+            rounds += 1
+
             time = Benchmark.realtime do
               system([executable, argv0], *args, out: File::NULL)
             end
@@ -220,6 +223,10 @@ module StartupTime
             times << time
 
             break if elapsed >= duration
+          end
+
+          if @verbosity == :verbose
+            puts 'rounds: %d' % rounds
           end
         else # how many times to run the tests
           spec.value.times do
