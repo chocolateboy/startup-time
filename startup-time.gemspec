@@ -44,5 +44,5 @@ Gem::Specification.new do |spec|
   spec.add_runtime_dependency 'values', '~> 1.8'
   spec.add_runtime_dependency 'wireless', '~> 0.0.2'
 
-  spec.add_development_dependency 'rubocop', '~> 0.75'
+  spec.add_development_dependency 'rubocop', '~> 0.78'
 end

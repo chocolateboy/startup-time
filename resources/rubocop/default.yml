@@ -10,7 +10,7 @@ AllCops:
     - '.rubocop/**/*'
     - '*.rb'
 
-Layout/AlignHash:
+Layout/HashAlignment:
   # EnforcedHashRocketStyle: table
   # EnforcedColonStyle: table
   Enabled: false
@@ -21,7 +21,7 @@ Layout/CaseIndentation:
 Layout/EndAlignment:
   EnforcedStyleAlignWith: variable
 
-Layout/IndentFirstHashElement:
+Layout/FirstHashElementIndentation:
   EnforcedStyle: consistent
 
 Lint/NestedMethodDefinition:
@@ -37,7 +37,7 @@ Naming/FileName:
     - '**/Rakefile'
 
 Naming/HeredocDelimiterNaming:
-  Blacklist:
+  ForbiddenDelimiters:
     - '(?:END|EOF)'
 
 Security/Eval:
