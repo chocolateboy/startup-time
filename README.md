@@ -58,34 +58,30 @@ $ startup-time --count 10
 
 ### Sample Output
 
-    Test                  Time (ms)
-    C (gcc)                    0.33
-    Nim                        0.44
-    Kotlin Native              0.61
-    LuaJIT                     0.64
-    Go                         0.66
-    Rust                       0.67
-    JavaScript (QuickJS)       0.83
-    D (DMD)                    0.88
-    Lua                        0.94
-    Java Native (GraalVM)      0.99
-    Haskell (GHC)              1.08
-    D (GDC)                    1.10
-    Wren                       1.14
-    C++ (g++)                  1.19
-    Crystal                    1.55
-    Perl                       1.66
-    Bash                       2.63
-    JavaScript (GraalVM)       3.88
-    JavaScript (Deno)         11.15
-    Python 3                  22.09
-    Ruby (TruffleRuby)        28.66
-    JavaScript (Node.js)      34.35
-    Python 2                  43.43
-    Java                      54.59
-    Ruby                      68.61
-    Kotlin                   103.02
-    Scala                    801.21
+    Test                      Time (ms)
+    C (gcc)                        0.43
+    Nim                            0.54
+    Rust                           0.67
+    LuaJIT                         0.70
+    Kotlin Native                  0.72
+    JavaScript (QuickJS)           0.98
+    Lua                            1.01
+    Go                             1.02
+    Haskell (GHC)                  1.13
+    C++ (g++)                      1.31
+    Perl                           1.75
+    Crystal                        1.87
+    Bash                           2.66
+    Java Native (GraalVM)          3.99
+    JavaScript (GraalVM/JS)        9.23
+    JavaScript (Deno)             12.70
+    Python 3                      22.51
+    JavaScript (SpiderMonkey)     23.38
+    JavaScript (Node.js)          37.47
+    Python 2                      44.22
+    Ruby (TruffleRuby)            44.25
+    Ruby                          55.19
+    Java                          79.53
 
 ## DESCRIPTION
 
@@ -151,7 +147,7 @@ OPTIONS:
 
 ## VERSION
 
-1.3.0
+2.0.0
 
 ## COPYRIGHT AND LICENSE
 

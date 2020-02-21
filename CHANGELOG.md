@@ -1,13 +1,20 @@
-## 1.4.0.0 - TBD
+## 2.0.0 - TBD
 
 **Breaking Changes**:
 
 - renamed some IDs/groups:
-  - quickjs -> qjs
-  - rubies  -> ruby
-  - ruby    -> mri
-- changed versioning from major.minor.patch -> marketing.breaking.fix.feature
+  - graalvm-js -> graal-js
+  - quickjs    -> qjs
+  - rubies     -> ruby
+  - ruby       -> mri
+- the GraalVM `js` interpeter is identified as `graal-js` rather than `js`
+
+Other changes:
+
+- add SpiderMonkey (`spidermonkey`)
+- add GraalVM's `node` implementation (`graal-node`)
 - log the number of rounds for each test in verbose mode
+- update the deno version command
 
 ## 1.3.0 - 2019-09-11
 

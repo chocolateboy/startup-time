@@ -243,7 +243,7 @@ module StartupTime
       }
 
       command = template % replacements
-      shell(command, env: test[:env])
+      shell(command, { env: test[:env] })
     end
 
     # a wrapper for Rake's +FileUtils#sh+ method (which wraps +Kernel#spawn+)
@@ -258,7 +258,7 @@ module StartupTime
     #
     #   shell "foo -c hello.foo -o hello", env: { FOO_VERBOSE: "0" }, out: File::NULL
     #
-    def shell(args, **options)
+    def shell(args, options = {})
       args = Array(args) # args is a string or array
       env = options.delete(:env)
       args.unshift(env) if env

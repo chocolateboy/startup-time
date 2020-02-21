@@ -2,9 +2,6 @@
 
 inherit_from: default.yml
 
-AllCops:
-  TargetRubyVersion: 2.3
-
 # the whole project is effectively one big Rakefile, so
 # we use the arrow syntax liberally (to declare tasks)
 Style/HashSyntax:

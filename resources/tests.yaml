@@ -31,7 +31,6 @@ deno:
   groups:
     - js
     - script
-  version: '%{compiler} version | head -n1'
   command:
     - deno
     - hello.js
@@ -107,14 +106,27 @@ go:
   version: '%{compiler} version'
   command: hello.go.out
 
-graalvm-js:
-  name: JavaScript (GraalVM)
+graal-js:
+  name: JavaScript (GraalVM/JS)
   groups:
-    - fast
+    - graalvm
+    - graalvm-js
     - js
     - script
   command:
+    - graal-js
+    - hello.js
+
+graal-node:
+  name: JavaScript (GraalVM/Node)
+  groups:
+    - graalvm
+    - graalvm-node
     - js
+    - script
+    - slow
+  command:
+    - graal-node
     - hello.js
 
 javac:
@@ -137,6 +149,7 @@ java-native:
   groups:
     - compiled
     - fast
+    - graalvm
     - java
     - native
     - slow-compile
@@ -234,17 +247,6 @@ node:
     - node
     - hello.js
 
-qjs:
-  name: JavaScript (QuickJS)
-  groups:
-    - fast
-    - js
-    - script
-  version: '%{compiler} --help | head -n1'
-  command:
-    - qjs
-    - hello.js
-
 perl5:
   name: Perl
   groups:
@@ -284,6 +286,18 @@ python3:
     - python3
     - hello.py
 
+qjs:
+  name: JavaScript (QuickJS)
+  groups:
+    - fast
+    - js
+    - quickjs
+    - script
+  version: '%{compiler} --help | head -n1'
+  command:
+    - qjs
+    - hello.js
+
 rustc:
   name: Rust
   groups:
@@ -308,9 +322,20 @@ scalac:
     - scala
     - HelloScala
 
+spidermonkey:
+  name: JavaScript (SpiderMonkey)
+  groups:
+    - fast
+    - js
+    - script
+  command:
+    - spidermonkey
+    - hello.js
+
 truffle-ruby:
   name: Ruby (TruffleRuby)
   groups:
+    - graalvm
     - ruby
     - script
   command:

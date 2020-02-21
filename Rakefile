@@ -14,7 +14,7 @@ GEMSPEC = Gem::Specification.load('startup-time.gemspec')
 # the documentation, and honors --user-install
 desc 'Install %s and its dependencies into the system gems' % GEMSPEC.name
 task :install_with_dependencies => %i[build] do
-  Bundler.with_clean_env do
+  Bundler.with_unbundled_env do
     sh 'gem install pkg/%s.gem' % GEMSPEC.full_name
   end
 end

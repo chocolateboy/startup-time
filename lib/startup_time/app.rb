@@ -6,9 +6,9 @@ require 'komenda'
 require 'shellwords' # for Array#shelljoin
 require 'tty/table'
 
-# FIXME we only need bundler/setup here (for Bundler.with_clean_env), but it appears
-# to create an incomplete Bundler object which (sometimes) confuses Komenda as well
-# as causing a Gem::LoadError (for unicode-display_width)
+# FIXME we only need bundler/setup here (for Bundler.with_unbundled_env), but it
+# appears to create an incomplete Bundler object which (sometimes) confuses Komenda
+# as well as causing a Gem::LoadError (for unicode-display_width)
 #
 # require 'bundler/setup'
 require 'bundler'
@@ -205,7 +205,7 @@ module StartupTime
 
       # the bundler environment slows down ruby and breaks truffle-ruby,
       # so make sure it's disabled for the benchmark
-      Bundler.with_clean_env do
+      Bundler.with_unbundled_env do
         if spec.type == :duration # how long to run the tests for
           duration = spec.value
           elapsed = 0

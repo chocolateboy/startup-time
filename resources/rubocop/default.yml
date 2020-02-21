@@ -24,13 +24,13 @@ Layout/EndAlignment:
 Layout/FirstHashElementIndentation:
   EnforcedStyle: consistent
 
-Lint/NestedMethodDefinition:
-  Enabled: false
-
 # Configuration parameters: AllowHeredoc, AllowURI, URISchemes.
 # URISchemes: http, https
-Metrics/LineLength:
+Layout/LineLength:
   Max: 120
+
+Lint/NestedMethodDefinition:
+  Enabled: false
 
 Naming/FileName:
   Exclude:
@@ -44,9 +44,6 @@ Security/Eval:
   Enabled: false
 
 Style/AsciiComments:
-  Enabled: false
-
-Style/BracesAroundHashParameters:
   Enabled: false
 
 Style/CommentAnnotation:
