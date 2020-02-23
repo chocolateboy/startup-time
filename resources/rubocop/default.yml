@@ -10,19 +10,22 @@ AllCops:
     - '.rubocop/**/*'
     - '*.rb'
 
-Layout/HashAlignment:
-  # EnforcedHashRocketStyle: table
-  # EnforcedColonStyle: table
-  Enabled: false
-
 Layout/CaseIndentation:
   EnforcedStyle: end
+
+Layout/EmptyLineAfterGuardClause:
+    Enabled: false
 
 Layout/EndAlignment:
   EnforcedStyleAlignWith: variable
 
 Layout/FirstHashElementIndentation:
   EnforcedStyle: consistent
+
+Layout/HashAlignment:
+  # EnforcedHashRocketStyle: table
+  # EnforcedColonStyle: table
+  Enabled: false
 
 # Configuration parameters: AllowHeredoc, AllowURI, URISchemes.
 # URISchemes: http, https

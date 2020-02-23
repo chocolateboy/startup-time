@@ -106,7 +106,7 @@ USAGE:
 
 OPTIONS:
 
-    -c, --count, --rounds INTEGER    The number of times to run each program
+    -c, --count, --rounds INTEGER    The number of times to run each program (minimum: 2)
         --clean                      Remove the build directory and exit
                                      (targets will be recompiled on the next run)
     -d, --dir PATH                   Specify the build directory

@@ -11,6 +11,7 @@ module StartupTime
     BUILD_DIR = EnvPaths.get('startup-time', suffix: false).cache
     DEFAULT_DURATION = 10
     MINIMUM_DURATION = 2
+    MINIMUM_ROUNDS = 2
 
     Spec = Value.new(:type, :value)
 
@@ -55,9 +56,11 @@ module StartupTime
           '--count',
           '--rounds INTEGER',
           Integer,
-          'The number of times to run each program'
+          "The number of times to run each program (minimum: #{MINIMUM_ROUNDS})"
         ) do |value|
-          @rounds = value
+          # XXX with ruby 2.4 (clamp) and 2.6 (start..):
+          # @rounds = value.clamp(MINIMUM_ROUNDS..)
+          @rounds = [MINIMUM_ROUNDS, value].max
         end
 
         opts.on(
@@ -137,7 +140,9 @@ module StartupTime
           'Specify the minimum number of seconds to run the test suite for',
           "(minimum: #{MINIMUM_DURATION}, default: #{DEFAULT_DURATION})"
         ) do |value|
-          @duration = [value, MINIMUM_DURATION].max
+          # XXX with ruby 2.4 (clamp) and 2.6 (start..):
+          # @duration = value.clamp(MINIMUM_DURATION..)
+          @duration = [MINIMUM_DURATION, value].max
         end
 
         opts.on(

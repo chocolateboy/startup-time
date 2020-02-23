@@ -27,7 +27,7 @@ module StartupTime
       @options = Options.new(args)
       @json = @options.format == :json
       @verbosity = @options.verbosity
-      @times = []
+      @results = []
 
       # provide/publish the Options instance we've just created so it's
       # available to other components
@@ -81,7 +81,7 @@ module StartupTime
         time(spec, **test)
       end
 
-      sorted = @times.sort_by { |result| result[:time] }
+      sorted = @results.sort_by { |result| result[:time] }
 
       if @json
         puts sorted.to_json
@@ -201,26 +201,24 @@ module StartupTime
         abort "invalid output for #{id}: #{output.inspect}"
       end
 
-      times = []
+      fastest_time = Float::INFINITY
 
       # the bundler environment slows down ruby and breaks truffle-ruby,
       # so make sure it's disabled for the benchmark
       Bundler.with_unbundled_env do
-        if spec.type == :duration # how long to run the tests for
+        if spec.type == :duration # how long to run this test for
           duration = spec.value
-          elapsed = 0
-          start = Time.now
           rounds = 0
+          start = Time.now
 
           loop do
-            rounds += 1
-
             time = Benchmark.realtime do
               system([executable, argv0], *args, out: File::NULL)
             end
 
             elapsed = Time.now - start
-            times << time
+            fastest_time = time if time < fastest_time
+            rounds += 1
 
             break if elapsed >= duration
           end
@@ -228,19 +226,21 @@ module StartupTime
           if @verbosity == :verbose
             puts 'rounds: %d' % rounds
           end
-        else # how many times to run the tests
+        else # how many times to run this test
           spec.value.times do
-            times << Benchmark.realtime do
+            time = Benchmark.realtime do
               system([executable, argv0], *args, out: File::NULL)
             end
+
+            fastest_time = time if time < fastest_time
           end
         end
       end
 
-      @times << {
+      @results << {
         id: id,
         name: test[:name],
-        time: (times.min * 1000).truncate(2)
+        time: (fastest_time * 1000).truncate(2)
       }
     end
   end

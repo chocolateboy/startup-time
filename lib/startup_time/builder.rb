@@ -92,9 +92,9 @@ module StartupTime
         if command.length == 1
           target = command.first
         elsif source.match?(/\A[A-Z]/) # JVM language
-          target = source.pathmap('%n.class')
+          target = source.pathmap('%n.class') # e.g. HelloJava.class
         else # native executable
-          target = '%s.out' % source
+          target = '%s.out' % source # e.g. hello.c.out
         end
       end
 
@@ -136,7 +136,7 @@ module StartupTime
 
       return unless java_native # return a falsey value i.e. disable the test
 
-      # XXX don't use Rake::Task[:name] here as that autovivifies the task!
+      # XXX don't use Rake::Task[name] here as that autovivifies the task!
       javac = Rake.application.lookup(:javac) || begin
         compile_if(:javac, connect: false, force: true) do |task, test|
           run(test[:compile], task, test)
@@ -183,10 +183,10 @@ module StartupTime
       selected_tests.each do |id, test|
         enabled = true
 
-        # handle the tests which have compile templates by a) turning them into
-        # blocks which substitute the compiler, source file and target file into
-        # the corresponding placeholders in the template, then b) executing the
-        # resulting command via +shell+
+        # handle the tests which have compile templates by a) turning them
+        # into blocks which substitute the compiler, source file and target
+        # file into the corresponding placeholders in the template, then b)
+        # executing the resulting command via +shell+
 
         if (command = test[:compile])
           block = ->(task, test_) { run(command, task, test_) }
@@ -201,8 +201,9 @@ module StartupTime
 
       CUSTOM_COMPILER.each do |id, method_name|
         selected_tests[id].tap do |test|
+          next unless test
           # XXX mutation/side-effect
-          test[:disabled] = !send(method_name) if test
+          test[:disabled] = send(method_name) ? false : true
         end
       end
     end
