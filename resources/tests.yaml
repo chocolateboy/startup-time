@@ -7,7 +7,6 @@ bash:
   groups:
     - fast
     - script
-  version: '%{compiler} --version | head -n1'
   command:
     - bash
     - hello.bash
@@ -21,7 +20,6 @@ crystal:
     - slow-compile
   source: hello.cr
   compile: '%{compiler} build --release -o %{target} %{source}'
-  version: '%{compiler} --version | head -n1'
   command: hello.cr.out
   env:
       CRYSTAL_CACHE_DIR: .crystal
@@ -44,7 +42,6 @@ dmd:
     - native
   source: hello.d
   compile: '%{compiler} -O -of=%{target} %{source}'
-  version: '%{compiler} --version | head -n1'
   command: hello.dmd.d.out
 
 g++:
@@ -57,7 +54,6 @@ g++:
     - native
   source: hello.cpp
   compile: '%{compiler} -O3 -o %{target} %{source}'
-  version: '%{compiler} --version | head -n1'
   command: hello.gpp.out
 
 gcc:
@@ -69,7 +65,6 @@ gcc:
     - native
   source: hello.c
   compile: '%{compiler} -O3 -o %{target} %{source}'
-  version: '%{compiler} --version | head -n1'
   command: hello.gcc.out
 
 gdc:
@@ -81,7 +76,6 @@ gdc:
     - native
   source: hello.d
   compile: '%{compiler} -O3 -o %{target} %{source}'
-  version: '%{compiler} --version | head -n1'
   command: hello.gdc.d.out
 
 ghc:
@@ -162,6 +156,7 @@ kotlinc-native:
   groups:
     - compiled
     - fast
+    - konan
     - kotlin
     - native
     - slow-compile
@@ -235,7 +230,6 @@ nim:
     - native
   source: hello.nim
   compile: '%{compiler} compile --out:%{target} --opt:speed --verbosity:0 --hints:off %{source}'
-  version: '%{compiler} --version | head -n1'
   command: hello.nim.out
 
 node:
@@ -325,7 +319,6 @@ scalac:
 spidermonkey:
   name: JavaScript (SpiderMonkey)
   groups:
-    - fast
     - js
     - script
   command:

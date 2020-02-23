@@ -164,8 +164,8 @@ module StartupTime
         unless version == false
           # if the test is both interpreted and compiled, default to
           # dumping the compiler version
-          version ||= '%{compiler} --version' if compiler
-          version ||= '%{interpreter} --version' if interpreter
+          version ||= '%{compiler} --version | head -n1' if compiler
+          version ||= '%{interpreter} --version | head -n1' if interpreter
 
           Array(version).each do |version_|
             version_command = version_ % {
