@@ -21,7 +21,7 @@ Gem::Specification.new do |spec|
   spec.files = `git ls-files -z -- *.md bin lib resources ':!:resources/rubocop'`.split("\0")
   spec.executables = Dir['bin/*'].map { |path| File.basename(path) }
 
-  spec.required_ruby_version = '>= 2.4.0'
+  spec.required_ruby_version = '>= 2.5.0'
 
   spec.metadata = {
     'allowed_push_host' => 'https://rubygems.org',

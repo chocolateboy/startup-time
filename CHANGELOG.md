@@ -2,6 +2,7 @@
 
 **Breaking Changes**:
 
+- bump the minimum supported ruby version from 2.4 -> 2.5
 - renamed some IDs/groups:
   - graalvm-js -> graal-js
   - quickjs    -> qjs
@@ -15,7 +16,7 @@ Other changes:
 - add SpiderMonkey (`spidermonkey`)
 - add GraalVM's `node` implementation (`graal-node`)
 - log the number of rounds for each test in verbose mode
-- update the deno version command
+- update the deno run/version commands
 
 ## 1.3.0 - 2019-09-11
 
