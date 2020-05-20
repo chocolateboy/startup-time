@@ -59,29 +59,23 @@ $ startup-time --count 10
 ### Sample Output
 
     Test                      Time (ms)
-    C (gcc)                        0.43
-    Nim                            0.54
-    Rust                           0.67
-    LuaJIT                         0.70
-    Kotlin Native                  0.72
-    JavaScript (QuickJS)           0.98
-    Lua                            1.01
-    Go                             1.02
-    Haskell (GHC)                  1.13
-    C++ (g++)                      1.31
-    Perl                           1.75
-    Crystal                        1.87
-    Bash                           2.66
-    Java Native (GraalVM)          3.99
-    JavaScript (GraalVM/JS)        9.23
-    JavaScript (Deno)             12.70
-    Python 3                      22.51
-    JavaScript (SpiderMonkey)     23.38
-    JavaScript (Node.js)          37.47
-    Python 2                      44.22
-    Ruby (TruffleRuby)            44.25
-    Ruby                          55.19
-    Java                          79.53
+    C (gcc)                        0.38
+    Rust                           0.64
+    Lua (LuaJIT)                   0.68
+    Go                             0.88
+    JavaScript (QuickJS)           0.91
+    Lua                            0.97
+    Haskell (GHC)                  1.12
+    C++ (g++)                      1.26
+    Crystal                        1.68
+    Perl                           1.69
+    Bash                           2.69
+    Python 2                       9.32
+    JavaScript (Deno)             14.53
+    Python 3                      22.46
+    JavaScript (SpiderMonkey)     24.69
+    JavaScript (Node.js)          41.70
+    Ruby                          55.24
 
 ## DESCRIPTION
 
