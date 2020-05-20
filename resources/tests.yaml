@@ -140,7 +140,7 @@ javac:
     - HelloJava
 
 java-native:
-  name: Java Native (GraalVM)
+  name: Java (GraalVM)
   groups:
     - compiled
     - fast
@@ -153,7 +153,7 @@ java-native:
   command: hello.java.out
 
 kotlinc-native:
-  name: Kotlin Native
+  name: Kotlin (Kotlin Native)
   groups:
     - compiled
     - fast
@@ -204,7 +204,7 @@ lua:
     - hello.lua
 
 luajit:
-  name: LuaJIT
+  name: Lua (LuaJIT)
   groups:
     - fast
     - luas
