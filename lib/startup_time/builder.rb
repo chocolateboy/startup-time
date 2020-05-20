@@ -94,7 +94,7 @@ module StartupTime
         elsif source.match?(/\A[A-Z]/) # JVM language
           target = source.pathmap('%n.class') # e.g. HelloJava.class
         else # native executable
-          target = '%s.out' % source # e.g. hello.c.out
+          target = '%s.out' % source # e.g. hello.gcc.out
         end
       end
 

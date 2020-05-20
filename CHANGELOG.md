@@ -8,6 +8,7 @@
   - rubies     -> ruby
   - ruby       -> mri
 - the GraalVM `js` interpeter is identified as `graal-js` rather than `js`
+- the minimum number of rounds for --count is now 2 (anything lower is set to 2)
 
 Other changes:
 

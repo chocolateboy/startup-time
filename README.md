@@ -129,7 +129,7 @@ OPTIONS:
 
 ## REFERENCES
 
-- [100 milliseconds](http://cogsci.stackexchange.com/questions/1664/what-is-the-threshold-where-actions-are-perceived-as-instant)
+- [100 milliseconds](https://cogsci.stackexchange.com/questions/1664/what-is-the-threshold-where-actions-are-perceived-as-instant)
 - [Comparison of "Hello, world!" syscalls](https://drewdevault.com/2020/01/04/Slow.html)
 - [Response Times: The 3 Important Limits](https://www.nngroup.com/articles/response-times-3-important-limits/)
 
@@ -154,4 +154,4 @@ OPTIONS:
 Copyright © 2015-2020 by chocolateboy
 
 This benchmark game is free software; you can redistribute it and/or modify it under the
-terms of the [Artistic License 2.0](http://www.opensource.org/licenses/artistic-license-2.0.php).
+terms of the [Artistic License 2.0](https://www.opensource.org/licenses/artistic-license-2.0.php).
