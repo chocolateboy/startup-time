@@ -81,7 +81,8 @@ $ startup-time --count 10
 
 A command-line tool which measures how long it takes to execute
 ["Hello, world!"](https://en.wikipedia.org/wiki/%22Hello,_World!%22_program)
-programs and prints a sorted table of the times after each run. Apart from
+programs written in various languages. It records the fastest time for each
+program and prints a sorted table of the times after each run. Apart from
 [ruby](#compatibility), the tool doesn't require any of the tested languages to
 be installed: if a compiler/interpreter is not available, the test is skipped.
 
