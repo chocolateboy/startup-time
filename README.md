@@ -23,7 +23,7 @@
 
 ## NAME
 
-startup-time - a command-line benchmarking tool which measures the startup times of programs in various languages
+startup-time - a command-line benchmarking tool to measure the startup times of programs in various languages
 
 ## INSTALLATION
 
@@ -79,17 +79,20 @@ $ startup-time --count 10
 
 ## DESCRIPTION
 
-A command-line tool which measures how long it takes to execute ["Hello, world!"](https://en.wikipedia.org/wiki/%22Hello,_World!%22_program)
-programs written in various languages. It records the fastest time for each program and prints a sorted table of the times after each run.
-Apart from the [prerequisites](#prerequisites) listed below, the tool doesn't require any of the tested languages to be installed: if a
-compiler/interpreter is not available, the test is skipped.
+A command-line tool which measures how long it takes to execute
+["Hello, world!"](https://en.wikipedia.org/wiki/%22Hello,_World!%22_program)
+programs and prints a sorted table of the times after each run. Apart from
+[ruby](#compatibility), the tool doesn't require any of the tested languages to
+be installed: if a compiler/interpreter is not available, the test is skipped.
 
 ### Why?
 
-To determine which languages are practical (or impractical) to use for command-line interface (CLI) tools. Anything under
-[100 milliseconds](https://www.nngroup.com/articles/response-times-3-important-limits/) is perceived as instantaneous.
-Anything over that is perceptibly delayed, which can impair interactivity and productivity on the command line, and can
-mean the difference between staying in the zone and losing your train of thought.
+To determine which languages are practical (or impractical) to use for
+command-line interface (CLI) tools. Anything under
+[100 milliseconds](https://www.nngroup.com/articles/response-times-3-important-limits/)
+is perceived as instantaneous. Anything over that is perceptibly delayed, which
+can impair interactivity and productivity on the command line, and can mean the
+difference between staying in the zone and losing your train of thought.
 
 ## OPTIONS
 
@@ -119,7 +122,9 @@ OPTIONS:
 
 ## COMPATIBILITY
 
-- [Maintained Ruby versions](https://www.ruby-lang.org/en/downloads/branches/)
+startup-time is tested and supported on all versions of Ruby
+[supported by the ruby-core team](https://www.ruby-lang.org/en/downloads/branches/),
+i.e., currently, Ruby 2.5 and above.
 
 ## REFERENCES
 
