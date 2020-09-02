@@ -12,7 +12,7 @@
 - [DESCRIPTION](#description)
   - [Why?](#why)
 - [OPTIONS](#options)
-- [PREREQUISITES](#prerequisites)
+- [COMPATIBILITY](#compatibility)
 - [REFERENCES](#references)
 - [SEE ALSO](#see-also)
 - [AUTHOR](#author)
@@ -117,9 +117,9 @@ OPTIONS:
     -V, --version                    Display the version and exit
 ```
 
-## PREREQUISITES
+## COMPATIBILITY
 
-- Ruby >= 2.5
+- [Maintained Ruby versions](https://www.ruby-lang.org/en/downloads/branches/)
 
 ## REFERENCES
 

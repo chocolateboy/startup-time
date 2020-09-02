@@ -3,6 +3,7 @@ AllCops:
   DisplayCopNames: true
   Exclude:
     - 'dev/**/*'
+    - 'resources/**/*'
     - 'temp.*'
     - 'vendor/**/*'
     - '.bundle/**/*'
@@ -10,11 +11,16 @@ AllCops:
     - '.rubocop/**/*'
     - '*.rb'
 
+Layout/HashAlignment:
+  # EnforcedHashRocketStyle: table
+  # EnforcedColonStyle: table
+  Enabled: false
+
 Layout/CaseIndentation:
   EnforcedStyle: end
 
 Layout/EmptyLineAfterGuardClause:
-    Enabled: false
+  Enabled: false
 
 Layout/EndAlignment:
   EnforcedStyleAlignWith: variable
@@ -22,17 +28,19 @@ Layout/EndAlignment:
 Layout/FirstHashElementIndentation:
   EnforcedStyle: consistent
 
-Layout/HashAlignment:
-  # EnforcedHashRocketStyle: table
-  # EnforcedColonStyle: table
-  Enabled: false
-
 # Configuration parameters: AllowHeredoc, AllowURI, URISchemes.
 # URISchemes: http, https
 Layout/LineLength:
-  Max: 120
+  # Max: 120
+  Enabled: false
+
+Layout/MultilineOperationIndentation:
+  Enabled: false
 
 Lint/NestedMethodDefinition:
+  Enabled: false
+
+Lint/ShadowingOuterLocalVariable:
   Enabled: false
 
 Naming/FileName:
@@ -43,16 +51,28 @@ Naming/HeredocDelimiterNaming:
   ForbiddenDelimiters:
     - '(?:END|EOF)'
 
+Naming/MethodParameterName:
+  Enabled: false
+
 Security/Eval:
   Enabled: false
 
 Style/AsciiComments:
   Enabled: false
 
+Style/BlockComments:
+  Enabled: false
+
+Style/CaseEquality:
+  Enabled: false
+
 Style/CommentAnnotation:
   Enabled: false
 
 Style/ConditionalAssignment:
+  Enabled: false
+
+Style/DoubleNegation:
   Enabled: false
 
 # Configuration parameters: EnforcedStyle, SupportedStyles.
@@ -74,6 +94,9 @@ Style/IfUnlessModifier:
 Style/MultilineBlockChain:
   Enabled: false
 
+Style/MultipleComparison:
+  Enabled: false
+
 Style/MutableConstant:
   Enabled: false
 
@@ -84,6 +107,9 @@ Style/NestedTernaryOperator:
   Enabled: false
 
 Style/PercentLiteralDelimiters:
+  Enabled: false
+
+Style/RegexpLiteral:
   Enabled: false
 
 Style/SpecialGlobalVars:
@@ -106,30 +132,8 @@ Style/WhileUntilModifier:
 
 # We've chosen to use Rubocop only for style, and not for
 # "complexity" or "quality" checks.
+#
+# https://metaredux.com/posts/2020/05/26/rubocop-defaults-survey-results.html#sidenote
 
-Metrics/AbcSize:
-  Enabled: false
-
-Metrics/BlockLength:
-  Enabled: false
-
-Metrics/BlockNesting:
-  Enabled: false
-
-Metrics/ClassLength:
-  Enabled: false
-
-Metrics/CyclomaticComplexity:
-  Enabled: false
-
-Metrics/MethodLength:
-  Enabled: false
-
-Metrics/ModuleLength:
-  Enabled: false
-
-Metrics/ParameterLists:
-  Enabled: false
-
-Metrics/PerceivedComplexity:
-  Enabled: false
+Metrics:
+    Enabled: false

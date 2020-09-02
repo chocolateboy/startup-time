@@ -43,6 +43,4 @@ Gem::Specification.new do |spec|
   spec.add_runtime_dependency 'tty-which', '~> 0.4'
   spec.add_runtime_dependency 'values', '~> 1.8'
   spec.add_runtime_dependency 'wireless', '~> 0.1'
-
-  spec.add_development_dependency 'rubocop', '~> 0.83'
 end

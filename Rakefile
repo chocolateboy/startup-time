@@ -2,7 +2,6 @@
 
 require 'bundler/gem_tasks'
 require 'bundler/setup'
-
 require 'startup_time/refinements'
 
 using StartupTime::Refinements # Rake refinements e.g. Task#prepend
@@ -25,13 +24,14 @@ task :lint do
 end
 
 desc 'Perform a quick test run of the command'
-task :test => %i[build lint] do
+task :test => :build do
   sh 'startup-time --version'
   sh 'startup-time --clean'
   sh "startup-time --omit #{NO_TEST} --verbose"
 end
 
 # run the test before release
-Rake::Task[:release].prepend(:test)
+# FIXME this doesn't actually prepend
+Rake::Task[:release].prepend(%i[lint test])
 
 task :default => :test

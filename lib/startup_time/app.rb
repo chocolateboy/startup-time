@@ -1,8 +1,10 @@
 # frozen_string_literal: true
 
 require 'benchmark'
+require 'fileutils'
 require 'json'
 require 'komenda'
+require 'rake'
 require 'shellwords' # for Array#shelljoin
 require 'tty/table'
 
@@ -19,7 +21,7 @@ module StartupTime
   class App
     EXPECTED_OUTPUT = /\AHello, world!\r?\n\z/
 
-    include FileUtils # for `sh`
+    include ::FileUtils # for `sh`
     include Util # for `which`
     include Services.mixin %i[builder selected_tests]
 

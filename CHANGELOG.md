@@ -1,6 +1,6 @@
 ## 2.0.0 - TBD
 
-**Breaking Changes**:
+#### Breaking Changes
 
 - bump the minimum supported ruby version from 2.4 -> 2.5
 - renamed some IDs/groups:
@@ -11,7 +11,7 @@
 - the GraalVM `js` interpeter is identified as `graal-js` rather than `js`
 - the minimum number of rounds for --count is now 2 (anything lower is set to 2)
 
-Other changes:
+#### Changes
 
 - add SpiderMonkey (`spidermonkey`)
 - add GraalVM's `node` implementation (`graal-node`)
