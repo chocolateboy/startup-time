@@ -131,6 +131,7 @@ i.e., currently, Ruby 2.5 and above.
 
 - [100 milliseconds](https://cogsci.stackexchange.com/questions/1664/what-is-the-threshold-where-actions-are-perceived-as-instant)
 - [Comparison of "Hello, world!" syscalls](https://drewdevault.com/2020/01/04/Slow.html)
+- [Hello "Hello world!"](https://blog.jfo.click/hello-hello-world/)
 - [Response Times: The 3 Important Limits](https://www.nngroup.com/articles/response-times-3-important-limits/)
 
 ## SEE ALSO
