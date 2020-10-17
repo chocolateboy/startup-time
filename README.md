@@ -3,8 +3,7 @@
 [![Build Status](https://travis-ci.org/chocolateboy/startup-time.svg)](https://travis-ci.org/chocolateboy/startup-time)
 [![Gem Version](https://img.shields.io/gem/v/startup-time.svg)](https://rubygems.org/gems/startup-time)
 
-<!-- toc -->
-
+<!-- TOC -->
 - [NAME](#name)
 - [INSTALLATION](#installation)
 - [SYNOPSIS](#synopsis)
@@ -13,13 +12,15 @@
   - [Why?](#why)
 - [OPTIONS](#options)
 - [COMPATIBILITY](#compatibility)
-- [REFERENCES](#references)
+- [LINKS](#links)
+  - [Response Times](#response-times)
+  - [Hello World](#hello-world)
 - [SEE ALSO](#see-also)
 - [AUTHOR](#author)
 - [VERSION](#version)
 - [COPYRIGHT AND LICENSE](#copyright-and-license)
 
-<!-- tocstop -->
+<!-- TOC END -->
 
 ## NAME
 
@@ -82,7 +83,7 @@ $ startup-time --count 10
 A command-line tool which measures how long it takes to execute
 ["Hello, world!"](https://en.wikipedia.org/wiki/%22Hello,_World!%22_program)
 programs written in various languages. It records the fastest time for each
-program and prints a sorted table of the times after each run. Apart from
+program and prints a sorted table of the results after each run. Apart from
 [ruby](#compatibility), the tool doesn't require any of the tested languages to
 be installed: if a compiler/interpreter is not available, the test is skipped.
 
@@ -127,12 +128,17 @@ startup-time is tested and supported on all versions of Ruby
 [supported by the ruby-core team](https://www.ruby-lang.org/en/downloads/branches/),
 i.e., currently, Ruby 2.5 and above.
 
-## REFERENCES
+## LINKS
+
+### Response Times
 
 - [100 milliseconds](https://cogsci.stackexchange.com/questions/1664/what-is-the-threshold-where-actions-are-perceived-as-instant)
+- [Response Times: The 3 Important Limits](https://www.nngroup.com/articles/response-times-3-important-limits/)
+
+### Hello World
+
 - [Comparison of "Hello, world!" syscalls](https://drewdevault.com/2020/01/04/Slow.html)
 - [Hello "Hello world!"](https://blog.jfo.click/hello-hello-world/)
-- [Response Times: The 3 Important Limits](https://www.nngroup.com/articles/response-times-3-important-limits/)
 
 ## SEE ALSO
 

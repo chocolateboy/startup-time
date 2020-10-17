@@ -9,7 +9,7 @@
   - rubies     -> ruby
   - ruby       -> mri
 - the GraalVM `js` interpeter is identified as `graal-js` rather than `js`
-- the minimum number of rounds for --count is now 2 (anything lower is set to 2)
+- the minimum number of rounds for `--count` is now 2 (anything lower is set to 2)
 
 #### Changes
 
@@ -27,9 +27,9 @@
 
 ## 1.2.0 - 2019-07-15
 
-- add -t/--time option to specify the minimum length of time to run tests for
+- add `-t`/`--time` option to specify the minimum length of time to run tests for
  (default: 5s)
-- format the ID -> group table as JSON if the --json option is provided
+- format the ID -> group table as JSON if the `--json` option is provided
 
 ## 1.1.1 - 2019-07-13
 
@@ -46,5 +46,5 @@
 
 - convert the script to a gem and release it
 - add tests for Deno, GraalVM JavaScript, Nim, and TruffleRuby
-- add --json option to render the results as a JSON array
+- add `--json` option to render the results as a JSON array
 - add changelog
